@@ -1,0 +1,344 @@
+@import "./vars";
+
+// 全局样式
+* {
+  font-family: MiSans, serif;
+}
+
+// 全局滚动条
+::-webkit-scrollbar-track-piece { //滚动条凹槽的颜色，还可以设置边框属性
+  background-color: #f8f8f8;
+}
+
+::-webkit-scrollbar { //滚动条的宽度
+  width: 8px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-thumb { //滚动条的设置
+  background-color: #dddddd;
+  background-clip: padding-box;
+  min-height: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #bbb;
+}
+
+// 左边
+.admin-sider {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  height: 100vh; /* 设置固定高度为视口高度 */
+  overflow: auto; /* 添加滚动条 */
+}
+
+// 调整收缩菜单为 60
+.ant-layout-sider-children .ant-menu.ant-menu-inline-collapsed {
+  width: @MENU-COLLAPSED-WIDTH;
+}
+
+// 扩大收缩图标后 padding 需要调整
+.ant-menu.ant-menu-inline-collapsed > .ant-menu-item,
+.ant-menu.ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item,
+.ant-menu.ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title,
+.ant-menu.ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title {
+  padding: 0 calc(50% - 18px / 2);
+}
+
+.admin-layout-logo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  height: @HEADER-HEIGHT;
+  line-height: @HEADER-HEIGHT;
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  background-color: @MENU-BG-COLOR;
+  text-align: center;
+
+  img {
+    height: @HEADER-HEIGHT;
+    line-height: @HEADER-HEIGHT;
+    padding: 12px 0;
+    user-select: none;
+  }
+}
+
+// 菜单
+.admin-sider-menu {
+  margin-top: @HEADER-HEIGHT;
+  padding: 10px 0;
+  padding-bottom: 60px;
+  overflow-y: scroll;
+  grid-template-rows: 1fr;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  user-select: none;
+}
+
+// 隐藏菜单滚动条
+.admin-sider::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+.admin-sider-menu::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+// Header
+.admin-header {
+  height: @HEADER-HEIGHT;
+  line-height: @HEADER-HEIGHT;
+  background-color: #ffffff;
+  box-shadow: @BOTTOM-BOX-SHADOW;
+  border-bottom: @BOTTOM-BOX-BORDER;
+  z-index: 1;
+  padding: 0 @BLANK-PADDING;
+  display: flex;
+  justify-content: space-between;
+
+  // 页面菜单名称
+  .admin-header-title {
+    display: flex;
+    font-size: 13px;
+    //font-weight: bolder;
+    //margin-left: 5px;
+
+    .ant-select {
+      margin-top: 10px;
+      margin-right: 10px;
+    }
+
+    .ant-select-arrow,
+    .ant-select-clear {
+      margin-top: -10px;
+    }
+
+    .ant-cascader-menu::-webkit-scrollbar {
+      /*滚动条整体样式*/
+      width: 5px; /*高宽分别对应横竖滚动条的尺寸*/
+      height: 1px;
+    }
+
+    .ant-cascader-menu::-webkit-scrollbar-thumb {
+      /*滚动条里面小方块*/
+      border-radius: 10px;
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+      background: rgba(200, 200, 200, 0.2);
+    }
+
+    .ant-cascader-menu::-webkit-scrollbar-track {
+      /*滚动条里面轨道*/
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      background: rgba(240, 240, 240, 0.2);
+    }
+  }
+
+  // 菜单名称前面的红点装饰
+  //.admin-header-title::before {
+  //  content: '';
+  //  display: block;
+  //  width: 3px;
+  //  height: 8px;
+  //  position: relative;
+  //  top: 20px;
+  //  left: -5px;
+  //  background: #CC0033;
+  //}
+
+  // 用户头像下拉菜单
+  .admin-header-menu {
+    cursor: pointer;
+
+    .admin-header-dropdown {
+      display: block;
+      height: @HEADER-HEIGHT;
+      line-height: @HEADER-HEIGHT;
+    }
+  }
+}
+
+// 下拉菜单
+.ant-dropdown-menu {
+  border-radius: 0;
+}
+
+/*Statistic*/
+.ant-statistic-title {
+  height: 30px;
+  line-height: 30px;
+  margin-bottom: 0;
+}
+
+.ant-statistic-content {
+  height: 30px;
+  line-height: 30px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+// 页码主体 Header
+.admin-dashboard-page-header {
+  margin-bottom: 10px;
+  box-shadow: 0 2px 10px rgba(9, 30, 66, 0.05);
+  border-bottom: 1px solid rgba(9, 30, 66, 0.08);
+  z-index: 1;
+  display: flex;
+  padding: 20px;
+  background-color: #ffffff;
+
+  // 左边
+  .admin-left {
+    display: flex;
+    margin-right: auto;
+
+    .admin-info {
+      height: 60px;
+      padding-left: 15px;
+
+      // 欢迎信息
+      .admin-welcome {
+        font-size: 18px;
+        font-weight: bold;
+        height: 35px;
+        line-height: 35px;
+      }
+
+      // 用户说明
+      .admin-desc {
+        color: rgba(0, 0, 0, .45);
+        height: 25px;
+        line-height: 25px;
+      }
+    }
+  }
+
+  // 右边
+  .admin-right {
+    margin-left: auto;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+// 主体 PageHeader
+.admin-common-page-header {
+  margin: @BLANK-PADDING;
+  background-color: #f8f8f7;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  background-image: url(../image/background/banner.png);
+  background-position: 100% 100%;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+
+  // 提示信息
+  .admin-notice {
+    padding: @BLANK-PADDING 20px;
+
+    .admin-title {
+      font-size: 15px;
+      font-weight: bolder;
+      margin-bottom: 5px;
+    }
+
+    * {
+      letter-spacing: 1px;
+      line-height: 25px;
+    }
+
+    ul, ol {
+      margin-bottom: 0;
+      padding-inline-start: 30px;
+    }
+  }
+}
+
+// 主题内容区
+.admin-content {
+  //margin: 20px;
+  min-height: 200px;
+  background-color: #ffffff;
+}
+
+.admin-search {
+  padding: 10px @BLANK-PADDING;
+  box-shadow: 0 2px 10px -2px rgba(9, 30, 66, 0.05);
+  border-bottom: 1px solid rgba(9, 30, 66, 0.08);
+  //background-color: #fafafa;
+  //margin: @BLANK-PADDING;
+  //margin-bottom: 0;
+  //padding: 20px @BLANK-PADDING 10px @BLANK-PADDING;
+  //border: 1px solid #f0f0f0;
+}
+
+.admin-table,
+.admin-btn-group {
+  padding: @BLANK-PADDING;
+  padding-bottom: 0;
+}
+
+// 按钮对齐
+.admin-submit-btn-group {
+  padding-top: 1px;
+}
+
+.admin-align-right {
+  text-align: right;
+}
+
+// 按钮组，左对齐的
+.admin-btn-group-left {
+  button {
+    margin-right: 10px;
+  }
+}
+
+// 按钮组，右对齐的
+.admin-btn-group-right {
+  button {
+    margin-left: 10px;
+  }
+}
+
+// 操作栏
+.admin-op {
+  display: flex;
+  justify-content: space-between;
+  padding: @BLANK-PADDING;
+}
+
+// 数据栏
+.admin-data {
+  padding: @BLANK-PADDING;
+  padding-top: 0;
+
+  .ant-table {
+    border: 1px solid #f0f0f0;
+    border-bottom: none;
+  }
+
+  .ant-tag {
+    border: none;
+  }
+}
+
+.admin-table-btn-group {
+  .ant-btn {
+    height: 24px;
+    line-height: 24px;
+    margin-right: 5px;
+    padding: 0 10px;
+  }
+}
+
+.admin-footer {
+  text-align: center;
+  background-color: #ffffff;
+  color: rgba(0, 0, 0, 0.5);
+}

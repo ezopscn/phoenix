@@ -1,0 +1,253 @@
+@import "./vars";
+
+/*菜单之间的间隙*/
+.menu-inline .ant-menu-item,
+.ant-menu-inline .ant-menu-item:not(:last-child),
+.ant-menu-inline .ant-menu-submenu-title,
+.ant-menu-inline .ant-menu-item {
+  margin-top: 3px;
+  margin-bottom: 0;
+}
+
+/*菜单字体颜色*/
+.ant-menu-dark .ant-menu-item,
+.ant-menu-dark .ant-menu-item-group-title,
+.ant-menu-dark .ant-menu-item > a,
+.ant-menu-dark .ant-menu-item > span > a,
+.ant-menu.ant-menu-dark,
+.ant-menu-dark .ant-menu-sub,
+.ant-menu.ant-menu-dark .ant-menu-sub {
+  color: #ffffff;
+  letter-spacing: 1px;
+}
+
+// 侧边背景
+.ant-layout-sider {
+  background: @MENU-BG-COLOR;
+}
+
+// 一级菜单背景
+.ant-menu.ant-menu-dark {
+  background: @MENU-BG-COLOR;
+}
+
+// 子菜单背景
+.ant-menu-dark .ant-menu-inline.ant-menu-sub {
+  background: @SUBMENU-BG-COLOR;
+}
+
+// 底部收缩
+.ant-layout-sider-trigger {
+  height: @HEADER-HEIGHT;
+  line-height: @HEADER-HEIGHT;
+  background-color: @SIDER-TRIGGER-BG-COLOR;
+}
+
+// 收缩后菜单宽度
+.ant-layout-sider-children .ant-menu.ant-menu-inline-collapsed {
+  width: @MENU-COLLAPSED-WIDTH;
+}
+
+// 菜单收缩动画不同步问题，直接去掉动画
+.ant-layout-sider {
+  transition: none !important;
+
+  //  菜单
+  .ant-menu {
+    transition: none !important;
+
+    // 不含子菜单
+    .ant-menu-item, .ant-menu-submenu-title {
+      transition: none !important;
+    }
+
+    // 含有子菜单
+    .ant-menu-submenu, .ant-menu-submenu-inline {
+      transition: none !important;
+    }
+
+    // 菜单图标
+    .ant-menu-item .ant-menu-item-icon,
+    .ant-menu-submenu-title .ant-menu-item-icon,
+    .ant-menu-item .anticon,
+    .ant-menu-submenu-title .anticon {
+      transition: none !important;
+    }
+
+    // 菜单文字
+    .ant-menu-item .ant-menu-item-icon + span,
+    .ant-menu-submenu-title .ant-menu-item-icon + span,
+    .ant-menu-item .anticon + span,
+    .ant-menu-submenu-title .anticon + span {
+      transition: none !important;
+    }
+  }
+
+  .ant-menu-vertical .ant-menu-item::after, .ant-menu-vertical-left .ant-menu-item::after, .ant-menu-vertical-right .ant-menu-item::after, .ant-menu-inline .ant-menu-item::after {
+    transition: none !important;
+  }
+
+  .ant-menu.ant-menu-dark .ant-menu-submenu-title .ant-menu-submenu-arrow,
+  .ant-menu-dark .ant-menu-sub .ant-menu-submenu-title .ant-menu-submenu-arrow,
+  .ant-menu.ant-menu-dark .ant-menu-sub .ant-menu-submenu-title .ant-menu-submenu-arrow {
+    transition: none !important;
+  }
+
+  .ant-layout-sider-trigger {
+    transition: none !important;
+  }
+
+  // 子菜单间隔问题
+  .ant-menu-sub li {
+    margin-top: 0 !important;
+  }
+
+  .ant-menu-sub li:last-child {
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+
+  .ant-menu-sub li:first-child {
+    margin-top: 5px !important;
+  }
+}
+
+.ant-menu.ant-menu-inline-collapsed > .ant-menu-item .ant-menu-item-icon,
+.ant-menu.ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item .ant-menu-item-icon,
+.ant-menu.ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title .ant-menu-item-icon,
+.ant-menu.ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title .ant-menu-item-icon,
+.ant-menu.ant-menu-inline-collapsed > .ant-menu-item .anticon,
+.ant-menu.ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item .anticon,
+.ant-menu.ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title .anticon,
+.ant-menu.ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title .anticon {
+  font-size: 18px;
+}
+
+// 弹出菜单
+.ant-menu-submenu-popup {
+  padding: 5px 0;
+
+  .ant-menu-vertical > .ant-menu-item {
+    height: 36px;
+    line-height: 36px;
+    margin: 0;
+  }
+}
+
+.ant-menu-vertical.ant-menu-sub,
+.ant-menu-vertical-left.ant-menu-sub,
+.ant-menu-vertical-right.ant-menu-sub {
+  min-width: auto;
+}
+
+.ant-menu-vertical .ant-menu-item:not(:last-child),
+.ant-menu-vertical-left .ant-menu-item:not(:last-child),
+.ant-menu-vertical-right .ant-menu-item:not(:last-child),
+.ant-menu-inline .ant-menu-item:not(:last-child) {
+  margin-bottom: 0;
+}
+
+.ant-tooltip-placement-right,
+.ant-tooltip-placement-rightTop,
+.ant-tooltip-placement-rightBottom {
+  padding-left: 5px;
+}
+
+// 菜单选中颜色
+.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background-color: @ADMIN-BLUE;
+}
+
+//表单项样式
+.ant-form-item {
+  margin-bottom: 15px;
+}
+
+// 输入框，选择框的高度重置
+.ant-form-item,
+.ant-form-item .ant-picker,
+.ant-picker-input > input,
+.ant-form-item-label,
+.ant-form-item-label > label,
+.ant-form-item-control,
+.ant-form-item-control-input,
+.ant-form-item-control-input-content,
+.ant-input,
+.ant-select-selection-search,
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-search-input,
+.ant-select-single .ant-select-selector .ant-select-selection-item,
+.ant-select-single .ant-select-selector .ant-select-selection-placeholder,
+.ant-btn {
+  height: @FORM-ITEM-HEIGHT;
+  line-height: @FORM-ITEM-HEIGHT;
+}
+
+.ant-form-item-control-input {
+  min-height: @FORM-ITEM-HEIGHT;
+}
+
+// 按钮
+.ant-btn {
+  top: 1px;
+  padding: 0 15px;
+}
+
+// 输入框样式
+.ant-input,
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+  padding: 0 10px;
+}
+
+.ant-form-item .ant-picker {
+  padding: 0 10px;
+  width: 100%;
+}
+
+// 对齐问题
+.ant-select-single .ant-select-selector .ant-select-selection-search {
+  top: -1px;
+}
+
+.ant-form-item-label,
+.ant-form-item-control {
+  top: 2px;
+}
+
+// Checkbox
+.ant-checkbox-inner {
+  border-radius: 0;
+}
+
+// 表格
+.ant-table.ant-table-small .ant-table-title,
+.ant-table.ant-table-small .ant-table-footer,
+.ant-table.ant-table-small .ant-table-thead > tr > th,
+.ant-table.ant-table-small .ant-table-tbody > tr > td,
+.ant-table.ant-table-small tfoot > tr > th,
+.ant-table.ant-table-small tfoot > tr > td {
+  padding: 5px 8px;
+}
+
+
+
+
+.ant-modal-header {
+  padding: 10px 20px;
+
+  .ant-modal-title {
+    font-weight: bold;
+  }
+}
+
+.ant-modal-close-x {
+  height: 42px;
+  width: 42px;
+  line-height: 42px;
+}
+
+.ant-modal-body {
+  padding: 20px;
+}
+
+
