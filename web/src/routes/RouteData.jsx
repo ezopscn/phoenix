@@ -20,15 +20,10 @@ export const RouteData = [
         ),
       },
       {
-        path: "kubernetes",
-        children: [
-          {
-            path: "node",
-            element: RouteLazyLoad(
-              React.lazy(() => import("../pages/kubernetes/node/Node.jsx")),
-            ),
-          },
-        ],
+        path: "node",
+        element: RouteLazyLoad(
+            React.lazy(() => import("../pages/kubernetes/node/Node.jsx")),
+        ),
       },
       {
         path: "users",
