@@ -25,8 +25,23 @@ func IsEmail(email string) bool {
 }
 
 // 验证手机号合法性
-func IsMobile(mobile string) bool {
+func IsPhone(phone string) bool {
 	pattern := `^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$`
 	reg := regexp.MustCompile(pattern)
-	return reg.MatchString(mobile)
+	return reg.MatchString(phone)
+}
+
+// 判断 JobId 合法性
+func IsJobId(jobId string) bool {
+	pattern := `^[a-zA-Z0-9_]{3,10}$`
+	reg := regexp.MustCompile(pattern)
+	return reg.MatchString(jobId)
+}
+
+// 隐藏手机号中间4位
+func MaskPhone(phone string) string {
+	if len(phone) <= 10 {
+		return phone
+	}
+	return phone[:3] + "****" + phone[len(phone)-4:]
 }

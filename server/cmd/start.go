@@ -54,7 +54,7 @@ var startCmd = &cobra.Command{
 
 		// 监听地址
 		listenAddress := fmt.Sprintf("%s:%s", common.Config.System.Listen, common.Config.System.Port)
-		logx.SYSTEM("服务启动监听的地址: ", listenAddress)
+		logx.SYSTEM("服务启动监听的地址:", listenAddress)
 
 		// 配置服务
 		server := http.Server{

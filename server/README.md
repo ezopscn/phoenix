@@ -53,6 +53,12 @@ go get -u github.com/golang-module/carbon/v2
 
 # Redis 客户端
 go get -u github.com/redis/go-redis/v9
+
+# JWT 认证
+go get -u github.com/appleboy/gin-jwt/v2
+
+# 邮件发送
+go get -u github.com/itrepablik/gomail
 ```
 
 <br>

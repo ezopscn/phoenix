@@ -5,12 +5,12 @@ import "github.com/golang-module/carbon/v2"
 // 用户模型
 type User struct {
 	BaseModel
-	Username               string        `gorm:"uniqueIndex:uidx_username;comment:用户名" json:"username"`
 	ENName                 string        `gorm:"not null;comment:英文名" json:"en_name"`
 	CNName                 string        `gorm:"not null;comment:中文名" json:"cn_name"`
-	JobId                  string        `gorm:"uniqueIndex:uidx_job_id;comment:工号" json:"job_id"`
+	JobId                  string        `gorm:"uniqueIndex:uidx_job_id;comment:工号（用户名）" json:"job_id"`
 	JobName                string        `gorm:"not null;comment:岗位名称" json:"job_name"`
-	Mobile                 string        `gorm:"uniqueIndex:uidx_mobile;comment:手机号" json:"mobile"`
+	Phone                  string        `gorm:"uniqueIndex:uidx_phone;comment:手机号" json:"phone"`
+	ShowPhone              *uint         `gorm:"type:tinyint(1);default:1;comment:是否显示手机号(0=不显示,1=显示)" json:"show_phone"`
 	Email                  string        `gorm:"uniqueIndex:uidx_email;comment:邮箱" json:"email"`
 	Landline               string        `gorm:"comment:固话号码" json:"landline"`
 	Password               string        `gorm:"not null;comment:密码" json:"-"` // json 中不显示 password 字段
@@ -31,7 +31,7 @@ type User struct {
 	NativeProvince         *Province     `gorm:"foreignKey:NativeProvinceId;comment:省" json:"native_province,omitempty"`
 	NativeCityId           uint          `gorm:"comment:籍贯市id" json:"native_city_id"`
 	NativeCity             *City         `gorm:"foreignKey:NativeCityId;comment:市" json:"native_city,omitempty"`
-	Gender                 uint          `gorm:"type:tinyint(1);default:1;comment:性别(1=男,2=女,3=未知)" json:"gender"`
+	Gender                 *uint         `gorm:"type:tinyint(1);default:1;comment:性别(1=男,2=女,3=未知)" json:"gender"`
 	Avatar                 string        `gorm:"comment:头像" json:"avatar"`
 	Birthday               carbon.Carbon `gorm:"comment:生日" json:"birthday"`
 	CreatorId              uint          `gorm:"comment:创建人id" json:"creator_id"` // 关联用户自身
@@ -39,7 +39,7 @@ type User struct {
 	LastLoginIP            string        `gorm:"comment:最后一次登录IP" json:"last_login_ip"`
 	LastLoginTime          carbon.Carbon `gorm:"comment:最后一次登录时间" json:"last_login_time"`
 	LastChangePasswordTime carbon.Carbon `gorm:"comment:最后一次修改密码时间" json:"last_change_password_time"`
-	Status                 uint          `gorm:"type:tinyint(1);default:1;comment:用户状态(0=禁用,1=正常)" json:"status"`
+	Status                 *uint         `gorm:"type:tinyint(1);default:1;comment:用户状态(0=禁用,1=正常)" json:"status"`
 	RoleId                 uint          `gorm:"comment:角色id" json:"role_id"` // 关联角色
 	Role                   *Role         `gorm:"foreignKey:RoleId;comment:角色" json:"role,omitempty"`
 }
