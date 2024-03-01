@@ -12,7 +12,7 @@ var roles = []model.Role{
 	{
 		BaseModel:   model.BaseModel{Id: 1},
 		Name:        "超级管理员",
-		Description: "System Administrator",
+		Description: "Super Administrator",
 	},
 	{
 		BaseModel:   model.BaseModel{Id: 2},

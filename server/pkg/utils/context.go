@@ -16,3 +16,13 @@ func GetUintFromContext(ctx *gin.Context, keyword string) (value uint, err error
 	value = uint(v)
 	return
 }
+
+// 获取 String 属性
+func GetStringFromContext(ctx *gin.Context, keyword string) (value string, err error) {
+	claims := jwt.ExtractClaims(ctx)
+	value, _ = claims[keyword].(string)
+	if value == "" {
+		err = fmt.Errorf("获取请求用户的%s失败", keyword)
+	}
+	return
+}

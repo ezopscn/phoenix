@@ -14,7 +14,7 @@ func HealthHandler(ctx *gin.Context) {
 
 // 开发者信息接口
 func InfoHandler(ctx *gin.Context) {
-	response.SuccessWithData(map[string]interface{}{
+	response.SuccessWithData(gin.H{
 		"developer": "Jayce",
 		"email":     "ezops.cn@gmail.com",
 	})
@@ -22,7 +22,7 @@ func InfoHandler(ctx *gin.Context) {
 
 // 系统版本接口
 func VersionHandler(ctx *gin.Context) {
-	response.SuccessWithData(map[string]interface{}{
+	response.SuccessWithData(gin.H{
 		"git_commit_id": common.Version,
 	})
 }
