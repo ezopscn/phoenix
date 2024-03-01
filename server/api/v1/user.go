@@ -187,8 +187,8 @@ func UserInfoHandler(ctx *gin.Context) {
 		return
 	}
 
-	// 没有 URI 参数则为当前用户
-	if jobId == "" {
+	// 没有 URI 参数，或者参数中 JobId 就是自己，则为当前用户
+	if jobId == "" || currentUserJobId == jobId {
 		isCurrentUser = true
 		jobId = currentUserJobId
 	}
@@ -213,7 +213,7 @@ func UserInfoHandler(ctx *gin.Context) {
 
 	// 如果不是查看当前用户，则需要判断对应用户是否隐藏手机号，或者当前用户是否是超级超级管理员
 	if !isCurrentUser && !utils.ContainsUint(common.AdminRoleIds, currentUserRoleId) {
-		if *user.ShowPhone == common.True {
+		if *user.ShowPhone == common.False {
 			user.Phone = utils.MaskPhone(user.Phone)
 		}
 	}
