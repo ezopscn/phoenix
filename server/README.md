@@ -1,13 +1,19 @@
 <!--suppress HtmlDeprecatedAttribute -->
-<h1 align="center">🥳 PHOENIX 后端开发文档</h1>
-<h3 align="center">使用 Go + React 前后端分离开发的 Kubernetes 运维管理平台后端</h3>
+<h1 align="center">🥳 后端开发文档</h1>
+<h3 align="center">使用 Go + React 开发的 Kubernetes 运维管理平台</h3>
 
 <p align="center">
   <a>
-    <img src="https://img.shields.io/badge/-MySQL-blue?style=flat-square&logo=mysql&logoColor=white" alt="">
+    <img src="https://img.shields.io/badge/-Golang 1.20-blue?style=flat-square&logo=go&logoColor=white" alt="">
   </a>
   <a>
-    <img src="https://img.shields.io/badge/-Redis-c14438?style=flat-square&logo=redis&logoColor=white&link=mailto:ezops.cn@gmail.com" alt="">
+    <img src="https://img.shields.io/badge/-Gin 1.9.1-blue?style=flat-square&logo=gin&logoColor=white" alt="">
+  </a>
+  <a>
+    <img src="https://img.shields.io/badge/-MySQL 8-blue?style=flat-square&logo=mysql&logoColor=white" alt="">
+  </a>
+  <a>
+    <img src="https://img.shields.io/badge/-Redis 7-c14438?style=flat-square&logo=redis&logoColor=white&link=mailto:ezops.cn@gmail.com" alt="">
   </a>
 </p>
 

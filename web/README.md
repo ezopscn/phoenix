@@ -1,9 +1,13 @@
 <!--suppress HtmlDeprecatedAttribute -->
-<h1 align="center">Hi 🥳, 前端开发文档</h1>
+<h1 align="center">🥳 前端开发文档</h1>
+<h3 align="center">使用 Go + React 开发的 Kubernetes 运维管理平台</h3>
 
 <p align="center">
   <a>
-    <img src="https://img.shields.io/badge/-Ant Design-blue?style=flat-square&logo=antdesign&logoColor=white" alt="">
+    <img src="https://img.shields.io/badge/-React 18.2.0-blue?style=flat-square&logo=react&logoColor=white&link=mailto:ezops.cn@gmail.com" alt="">
+  </a>
+  <a>
+    <img src="https://img.shields.io/badge/-Ant Design 4.X-blue?style=flat-square&logo=antdesign&logoColor=white" alt="">
   </a>
 </p>
 
