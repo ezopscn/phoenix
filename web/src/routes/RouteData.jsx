@@ -1,7 +1,7 @@
 import React from "react";
 import ButterflyLayout from "../components/layout/Layout.jsx";
-import { Navigate } from "react-router";
-import RouteLazyLoad from "./RouteLazyLoad.jsx"; // 路由数据
+import RouteLazyLoad from "./RouteLazyLoad.jsx";
+import {Navigate} from "react-router";
 
 // 路由数据
 export const RouteData = [

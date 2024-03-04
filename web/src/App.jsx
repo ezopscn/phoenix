@@ -1,6 +1,6 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
 import RouteRules from "./routes/RouteRules.jsx";
+import {BrowserRouter} from "react-router-dom";
 
 const App = () => {
   return (
