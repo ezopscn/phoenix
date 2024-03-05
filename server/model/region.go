@@ -3,11 +3,11 @@ package model
 // 数据来源：https://github.com/modood/Administrative-divisions-of-China
 // 省
 type Province struct {
-	Id      uint   `gorm:"primaryKey;comment:id" json:"id"`
-	Name    string `gorm:"comment:省份名称" json:"name"`
-	Cities  []uint `gorm:"-" json:"-"`
-	Areas   []uint `gorm:"-" json:"-"`
-	Streets []uint `gorm:"-" json:"-"`
+	Id      uint     `gorm:"primaryKey;comment:id" json:"id"`
+	Name    string   `gorm:"comment:省份名称" json:"name"`
+	Cities  []City   `json:"cities,omitempty"`
+	Areas   []Area   `json:"areas,omitempty"`
+	Streets []Street `json:"streets,omitempty"`
 }
 
 func (Province) TableName() string {
@@ -20,8 +20,8 @@ type City struct {
 	Name       string   `gorm:"comment:市名称" json:"name"`
 	ProvinceId uint     `gorm:"comment:省份id" json:"province_id"`
 	Province   Province `gorm:"foreignKey:ProvinceId;comment:省" json:"-"`
-	Areas      []uint   `gorm:"-" json:"-"`
-	Streets    []uint   `gorm:"-" json:"-"`
+	Areas      []Area   `json:"areas,omitempty"`
+	Streets    []Street `json:"streets,omitempty"`
 }
 
 func (City) TableName() string {
@@ -36,7 +36,7 @@ type Area struct {
 	City       City     `gorm:"foreignKey:CityId;comment:市" json:"-"`
 	ProvinceId uint     `gorm:"comment:省份id" json:"province_id"`
 	Province   Province `gorm:"foreignKey:ProvinceId;comment:省" json:"-"`
-	Streets    []uint   `gorm:"-" json:"-"`
+	Streets    []Street `json:"streets,omitempty"`
 }
 
 func (Area) TableName() string {

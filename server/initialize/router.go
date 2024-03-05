@@ -36,6 +36,11 @@ func Router() *gin.Engine {
 	loginRG.Use(auth.MiddlewareFunc())
 	routes.LoginRoutes(loginRG, auth)
 
+	// 地区路由组
+	regionRG := r.Group(baseApiPrefix)
+	regionRG.Use(auth.MiddlewareFunc())
+	routes.RegionRoutes(regionRG, auth)
+
 	// 用户路由组
 	userRG := r.Group(baseApiPrefix + "/" + "user")
 	userRG.Use(auth.MiddlewareFunc())
