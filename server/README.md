@@ -31,6 +31,7 @@
 - [x] Redis：Redis 客户端 [:octocat:](https://github.com/redis/go-redis)
 - [x] Jwt：用户认证, 登入登出一键搞定 [:octocat:](https://github.com/appleboy/gin-jwt)
 - [x] GoMail：发送邮件 [:octocat:](https://github.com/itrepablik/gomail)
+- [x] Casbin：一个强大的、高效的开源访问控制框架 [:octocat:](https://casbin.org/zh/docs/overview)
 
 <br>
 
@@ -65,6 +66,10 @@ go get -u github.com/appleboy/gin-jwt/v2
 
 # 邮件发送
 go get -u github.com/itrepablik/gomail
+
+# RBAC
+go get -u github.com/casbin/casbin/v2
+go get -u github.com/casbin/gorm-adapter/v3
 ```
 
 <br>

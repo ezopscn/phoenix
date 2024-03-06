@@ -116,15 +116,16 @@ func payloadFunc(data interface{}) jwt.MapClaims {
 	if user, ok := data.(*model.User); ok {
 		// 封装一些常用的字段，方便直接使用
 		return jwt.MapClaims{
-			jwt.IdentityKey: user.JobId,     // 工号
-			"JobId":         user.JobId,     // 工号
-			"ENName":        user.ENName,    // 英文名
-			"CNName":        user.CNName,    // 中文名
-			"Phone":         user.Phone,     // 用户手机
-			"Email":         user.Email,     // 邮箱
-			"Avatar":        user.Avatar,    // 头像
-			"RoleId":        user.Role.Id,   // 角色 Id
-			"RoleName":      user.Role.Name, // 角色名称
+			jwt.IdentityKey: user.JobId,        // 工号
+			"JobId":         user.JobId,        // 工号
+			"ENName":        user.ENName,       // 英文名
+			"CNName":        user.CNName,       // 中文名
+			"Phone":         user.Phone,        // 用户手机
+			"Email":         user.Email,        // 邮箱
+			"Avatar":        user.Avatar,       // 头像
+			"RoleId":        user.Role.Id,      // 角色 Id
+			"RoleName":      user.Role.Name,    // 角色名称
+			"RoleKeyword":   user.Role.Keyword, // 角色关键字
 		}
 	}
 	return jwt.MapClaims{}

@@ -26,25 +26,15 @@ func Router() *gin.Engine {
 	baseApiPrefix := common.Config.System.ApiPrefix + "/" + common.Config.System.ApiVersion
 
 	// 基础路由组
-	baseRG := r.Group(baseApiPrefix)
-
-	// 开放路由组
-	routes.PublicRoutes(baseRG, auth)
-
-	// 登录路由组
-	loginRG := r.Group(baseApiPrefix)
-	loginRG.Use(auth.MiddlewareFunc())
-	routes.LoginRoutes(loginRG, auth)
-
-	// 地区路由组
-	regionRG := r.Group(baseApiPrefix)
-	regionRG.Use(auth.MiddlewareFunc())
-	routes.RegionRoutes(regionRG, auth)
-
-	// 用户路由组
-	userRG := r.Group(baseApiPrefix + "/" + "user")
-	userRG.Use(auth.MiddlewareFunc())
-	routes.UserRoutes(userRG, auth)
+	brg := r.Group(baseApiPrefix)
+	{
+		routes.PublicRoutes(brg, auth) // 开放路由组
+		routes.LoginRoutes(brg, auth)  // 登录路由组
+		routes.RegionRoutes(brg, auth) // 地区路由组
+		routes.UserRoutes(brg, auth)   // 用户路由组
+		routes.RoleRoutes(brg, auth)   // 角色路由组
+		routes.MenuRoutes(brg, auth)   // 菜单路由组
+	}
 
 	logx.SYSTEM("路由列表初始化完成")
 	return r

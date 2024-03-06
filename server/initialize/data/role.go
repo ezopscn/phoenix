@@ -12,12 +12,14 @@ var roles = []model.Role{
 	{
 		BaseModel:   model.BaseModel{Id: 1},
 		Name:        "超级管理员",
-		Description: "Super Administrator",
+		Keyword:     "Administrator",
+		Description: "超级管理员，最高权限",
 	},
 	{
 		BaseModel:   model.BaseModel{Id: 2},
 		Name:        "访客",
-		Description: "Guest",
+		Keyword:     "Guest",
+		Description: "游客，最基础的浏览权限",
 	},
 }
 

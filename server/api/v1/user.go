@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-// 用户列表
+// 获取用户列表
 func UserListHandler(ctx *gin.Context) {
 	// 获取请求参数
 	var req dto.UserListRequest
@@ -165,37 +165,17 @@ func UserListHandler(ctx *gin.Context) {
 	})
 }
 
-// 用户信息
-func UserInfoHandler(ctx *gin.Context) {
-	// 是否是当前用户
-	var isCurrentUser bool
-
-	// 获取 URI 参数
-	jobId := ctx.Param("jobId")
-
-	// 获取当前用户的 RoleId
-	currentUserRoleId, err := utils.GetUintFromContext(ctx, "RoleId")
-	if err != nil {
-		response.FailedWithCodeAndMessage(response.Forbidden, response.ForbiddenMessage)
-		return
-	}
-
+// 获取当前用户信息
+func CurrentUserInfoHandler(ctx *gin.Context) {
 	// 获取当前用户的 JobId
-	currentUserJobId, err := utils.GetStringFromContext(ctx, "JobId")
-	if err != nil {
+	jobId, err := utils.GetStringFromContext(ctx, "JobId")
+	if err != nil || !utils.IsJobId(jobId) {
 		response.FailedWithCodeAndMessage(response.Forbidden, response.ForbiddenMessage)
 		return
-	}
-
-	// 没有 URI 参数，或者参数中 JobId 就是自己，则为当前用户
-	if jobId == "" || currentUserJobId == jobId {
-		isCurrentUser = true
-		jobId = currentUserJobId
 	}
 
 	// 查询指定 JobId 的用户信息
-	var user model.User
-	err = common.DB.
+	dbt := common.DB.
 		Preload("Role").
 		Preload("Department").
 		Preload("OfficeProvince").
@@ -203,22 +183,62 @@ func UserInfoHandler(ctx *gin.Context) {
 		Preload("OfficeArea").
 		Preload("OfficeStreet").
 		Preload("NativeProvince").
-		Preload("NativeCity").
-		Where("job_id = ?", jobId).First(&user).Error
+		Preload("NativeCity")
 
+	var user model.User
+	err = dbt.Where("job_id = ?", jobId).First(&user).Error
 	if err != nil {
 		response.FailedWithCode(response.NotFound)
 		return
 	}
 
-	// 如果不是查看当前用户，则需要判断对应用户是否隐藏手机号，或者当前用户是否是超级超级管理员
-	if !isCurrentUser && !utils.ContainsUint(common.AdminRoleIds, currentUserRoleId) {
+	response.SuccessWithData(gin.H{
+		"info": user,
+	})
+}
+
+// 获取指定 JobId 的用户信息
+func UserInfoByJobIdHandler(ctx *gin.Context) {
+	// 获取 URI 参数
+	jobId := ctx.Param("jobId")
+	if !utils.IsJobId(jobId) {
+		response.FailedWithCodeAndMessage(response.ParamError, response.ParamErrorMessage)
+		return
+	}
+
+	// 查询指定 JobId 的用户信息
+	dbt := common.DB.
+		Preload("Role").
+		Preload("Department").
+		Preload("OfficeProvince").
+		Preload("OfficeCity").
+		Preload("OfficeArea").
+		Preload("OfficeStreet").
+		Preload("NativeProvince").
+		Preload("NativeCity")
+
+	var user model.User
+	err := dbt.Where("job_id = ?", jobId).First(&user).Error
+	if err != nil {
+		response.FailedWithCode(response.NotFound)
+		return
+	}
+
+	// 获取当前用户的 RoleId
+	roleId, err := utils.GetUintFromContext(ctx, "RoleId")
+	if err != nil || roleId == 0 {
+		response.FailedWithCodeAndMessage(response.Forbidden, response.ForbiddenMessage)
+		return
+	}
+
+	// 如果不是管理员，则需要判断对应用户是否隐藏手机号
+	if !utils.ContainsUint(common.AdminRoleIds, roleId) {
 		if *user.ShowPhone == common.False {
 			user.Phone = utils.MaskPhone(user.Phone)
 		}
 	}
 
 	response.SuccessWithData(gin.H{
-		"user": user,
+		"info": user,
 	})
 }

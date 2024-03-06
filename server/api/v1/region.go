@@ -26,8 +26,8 @@ func CityListByProvinceIdHandler(ctx *gin.Context) {
 	// 参数处理
 	sid := ctx.Param("provinceId")
 	uid, err := utils.ConvertStringToUint(sid)
-	if err != nil {
-		response.FailedWithMessage(response.ParamErrorMessage)
+	if err != nil || uid == 0 {
+		response.FailedWithCodeAndMessage(response.ParamError, response.ParamErrorMessage)
 		return
 	}
 
@@ -48,8 +48,8 @@ func AreaListByCityIdHandler(ctx *gin.Context) {
 	// 参数处理
 	sid := ctx.Param("cityId")
 	uid, err := utils.ConvertStringToUint(sid)
-	if err != nil {
-		response.FailedWithMessage(response.ParamErrorMessage)
+	if err != nil || uid == 0 {
+		response.FailedWithCodeAndMessage(response.ParamError, response.ParamErrorMessage)
 		return
 	}
 
@@ -70,8 +70,8 @@ func StreetListByAreaIdHandler(ctx *gin.Context) {
 	// 参数处理
 	sid := ctx.Param("areaId")
 	uid, err := utils.ConvertStringToUint(sid)
-	if err != nil {
-		response.FailedWithMessage(response.ParamErrorMessage)
+	if err != nil || uid == 0 {
+		response.FailedWithCodeAndMessage(response.ParamError, response.ParamErrorMessage)
 		return
 	}
 
