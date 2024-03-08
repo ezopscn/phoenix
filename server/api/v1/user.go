@@ -10,12 +10,12 @@ import (
 	"strings"
 )
 
-// 获取用户列表
-func UserListHandler(ctx *gin.Context) {
+// 获取用户列表处理函数
+func GetUserListHandler(ctx *gin.Context) {
 	// 获取请求参数
 	var req dto.UserListRequest
 	if err := ctx.ShouldBindQuery(&req); err != nil {
-		response.FailedWithMessage(response.ParamErrorMessage)
+		response.FailedWithCodeAndMessage(response.ParamError, response.ParamErrorMessage)
 		return
 	}
 
@@ -142,15 +142,15 @@ func UserListHandler(ctx *gin.Context) {
 		return
 	}
 
-	// 获取当前用户的角色 Id
-	roleId, err := utils.GetUintFromContext(ctx, "RoleId")
+	// 获取当前用户的角色关键字
+	roleKeyword, err := utils.GetStringFromContext(ctx, "RoleKeyword")
 	if err != nil {
 		response.FailedWithCodeAndMessage(response.Forbidden, response.ForbiddenMessage)
 		return
 	}
 
 	// 如果不是管理员，需要处理手机号显示问题
-	if !utils.ContainsUint(common.AdminRoleIds, roleId) {
+	if roleKeyword != common.SuperAdminRoleKeyword {
 		for idx, user := range users {
 			if *user.ShowPhone == common.False {
 				users[idx].Phone = utils.MaskPhone(user.Phone)
@@ -165,8 +165,8 @@ func UserListHandler(ctx *gin.Context) {
 	})
 }
 
-// 获取当前用户信息
-func CurrentUserInfoHandler(ctx *gin.Context) {
+// 获取当前用户信息处理函数
+func GetCurrentUserInfoHandler(ctx *gin.Context) {
 	// 获取当前用户的 JobId
 	jobId, err := utils.GetStringFromContext(ctx, "JobId")
 	if err != nil || !utils.IsJobId(jobId) {
@@ -174,8 +174,9 @@ func CurrentUserInfoHandler(ctx *gin.Context) {
 		return
 	}
 
-	// 查询指定 JobId 的用户信息
-	dbt := common.DB.
+	// 查询当前用户的用户信息
+	var user model.User
+	err = common.DB.
 		Preload("Role").
 		Preload("Department").
 		Preload("OfficeProvince").
@@ -183,31 +184,47 @@ func CurrentUserInfoHandler(ctx *gin.Context) {
 		Preload("OfficeArea").
 		Preload("OfficeStreet").
 		Preload("NativeProvince").
-		Preload("NativeCity")
+		Preload("NativeCity").
+		Where("job_id = ?", jobId).First(&user).Error
 
-	var user model.User
-	err = dbt.Where("job_id = ?", jobId).First(&user).Error
 	if err != nil {
-		response.FailedWithCode(response.NotFound)
+		response.FailedWithMessage("查询当前用户的用户信息失败")
 		return
 	}
 
+	// 响应请求
 	response.SuccessWithData(gin.H{
 		"info": user,
 	})
 }
 
-// 获取指定 JobId 的用户信息
-func UserInfoByJobIdHandler(ctx *gin.Context) {
-	// 获取 URI 参数
-	jobId := ctx.Param("jobId")
-	if !utils.IsJobId(jobId) {
+// 获取指定用户的用户信息处理函数
+// 支持参数：dto.UserInfoRequest
+func GetSpecifyUserInfoHandler(ctx *gin.Context) {
+	// 获取当前用户的 JobId
+	jobId, err := utils.GetStringFromContext(ctx, "JobId")
+	if err != nil || !utils.IsJobId(jobId) {
+		response.FailedWithCodeAndMessage(response.Forbidden, response.ForbiddenMessage)
+		return
+	}
+
+	// 获取当前用户的角色关键字
+	roleKeyword, err := utils.GetStringFromContext(ctx, "RoleKeyword")
+	if err != nil || !utils.IsRoleKeyword(roleKeyword) {
+		response.FailedWithCodeAndMessage(response.Forbidden, response.ForbiddenMessage)
+		return
+	}
+
+	// 获取 URI 参数，并验证合法性
+	sid := ctx.Param("jobId")
+	if !utils.IsJobId(sid) {
 		response.FailedWithCodeAndMessage(response.ParamError, response.ParamErrorMessage)
 		return
 	}
 
-	// 查询指定 JobId 的用户信息
-	dbt := common.DB.
+	// 查询当前用户的用户信息
+	var user model.User
+	err = common.DB.
 		Preload("Role").
 		Preload("Department").
 		Preload("OfficeProvince").
@@ -215,29 +232,22 @@ func UserInfoByJobIdHandler(ctx *gin.Context) {
 		Preload("OfficeArea").
 		Preload("OfficeStreet").
 		Preload("NativeProvince").
-		Preload("NativeCity")
+		Preload("NativeCity").
+		Where("job_id = ?", sid).First(&user).Error
 
-	var user model.User
-	err := dbt.Where("job_id = ?", jobId).First(&user).Error
 	if err != nil {
-		response.FailedWithCode(response.NotFound)
+		response.FailedWithMessage("查询指定用户的用户信息失败")
 		return
 	}
 
-	// 获取当前用户的 RoleId
-	roleId, err := utils.GetUintFromContext(ctx, "RoleId")
-	if err != nil || roleId == 0 {
-		response.FailedWithCodeAndMessage(response.Forbidden, response.ForbiddenMessage)
-		return
-	}
-
-	// 如果不是管理员，则需要判断对应用户是否隐藏手机号
-	if !utils.ContainsUint(common.AdminRoleIds, roleId) {
+	// 不是管理员且查询的用户不是自己，则需要检查密码是否需要隐藏
+	if roleKeyword != common.SuperAdminRoleKeyword && jobId != sid {
 		if *user.ShowPhone == common.False {
 			user.Phone = utils.MaskPhone(user.Phone)
 		}
 	}
 
+	// 响应请求
 	response.SuccessWithData(gin.H{
 		"info": user,
 	})

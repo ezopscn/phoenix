@@ -32,10 +32,25 @@ func IsPhone(phone string) bool {
 }
 
 // 判断 JobId 合法性
+// 只能包含大小写字母、数字和中横线
+// 不能以数字或中横线开头
+// 不能以中横线结尾
+// 长度在 4-15 位
 func IsJobId(jobId string) bool {
-	pattern := `^[a-zA-Z0-9_]{3,10}$`
+	pattern := `^[a-zA-Z][a-zA-Z0-9-]{2,13}[a-zA-Z0-9]$`
 	reg := regexp.MustCompile(pattern)
 	return reg.MatchString(jobId)
+}
+
+// 判断 RoleKeyword 合法性：
+// 只能包含小写字母、数字和中横线
+// 不能以数字或中横线开头
+// 不能以中横线结尾
+// 长度在 2-15 位
+func IsRoleKeyword(roleKeyword string) bool {
+	pattern := `^[a-z][a-z0-9-]{1,13}[a-z0-9]$`
+	reg := regexp.MustCompile(pattern)
+	return reg.MatchString(roleKeyword)
 }
 
 // 隐藏手机号中间4位

@@ -16,4 +16,5 @@ func MigrateTable() {
 	_ = common.DB.AutoMigrate(new(model.Menu))            // 菜单
 	_ = common.DB.AutoMigrate(new(model.Role))            // 角色
 	_ = common.DB.AutoMigrate(new(model.CasbinRuleTable)) // Casbin
+	_ = common.DB.AutoMigrate(new(model.API))             // API 接口
 }

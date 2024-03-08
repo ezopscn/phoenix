@@ -22,3 +22,8 @@ type UserListRequest struct {
 	RoleId           uint   `json:"role_id" form:"role_id"`
 	Page
 }
+
+// 用户信息请求
+type UserInfoRequest struct {
+	JobId string `json:"job_id" form:"job_id"`
+}

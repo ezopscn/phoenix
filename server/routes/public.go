@@ -14,11 +14,3 @@ func PublicRoutes(rg *gin.RouterGroup, auth *jwt.GinJWTMiddleware) gin.IRoutes {
 	rg.POST("/login", auth.LoginHandler)   // 用户登录接口
 	return rg
 }
-
-// 登录路由组
-func LoginRoutes(rg *gin.RouterGroup, auth *jwt.GinJWTMiddleware) gin.IRoutes {
-	rgs := rg.Group("")
-	rgs.Use(auth.MiddlewareFunc())         // 登录中间件
-	rgs.GET("/logout", auth.LogoutHandler) // 用户注销接口
-	return rgs
-}
