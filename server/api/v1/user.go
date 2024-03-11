@@ -1,10 +1,12 @@
 package v1
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"phoenix/common"
 	"phoenix/dto"
 	"phoenix/model"
+	"phoenix/pkg/logx"
 	"phoenix/pkg/response"
 	"phoenix/pkg/utils"
 	"strings"
@@ -138,22 +140,25 @@ func GetUserListHandler(ctx *gin.Context) {
 
 	// 判断查询是否出错
 	if err != nil {
-		response.FailedWithMessage(response.ParamErrorMessage)
+		logx.ERROR("查询用户列表失败,", err.Error())
+		response.FailedWithMessage("查询用户列表失败")
 		return
 	}
 
-	// 获取当前用户的角色关键字
-	roleKeyword, err := utils.GetStringFromContext(ctx, "RoleKeyword")
+	// 获取当前用户的工号和角色关键字
+	currentUserJobId, currentUserRoleKeyword, err := utils.GetJobIdAndRoleKeywordFromContext(ctx)
 	if err != nil {
-		response.FailedWithCodeAndMessage(response.Forbidden, response.ForbiddenMessage)
+		response.FailedWithMessage("获取当前用户的信息失败")
 		return
 	}
 
-	// 如果不是管理员，需要处理手机号显示问题
-	if roleKeyword != common.SuperAdminRoleKeyword {
+	// 当用户开启隐藏手机号，且当前用户不是管理员，信息获取的也不是自己，则需要对手机号加密
+	if currentUserRoleKeyword != common.SuperAdminRoleKeyword {
 		for idx, user := range users {
 			if *user.ShowPhone == common.False {
-				users[idx].Phone = utils.MaskPhone(user.Phone)
+				if currentUserJobId != user.JobId {
+					users[idx].Phone = utils.MaskPhone(user.Phone)
+				}
 			}
 		}
 	}
@@ -165,17 +170,21 @@ func GetUserListHandler(ctx *gin.Context) {
 	})
 }
 
-// 获取当前用户信息处理函数
-func GetCurrentUserInfoHandler(ctx *gin.Context) {
-	// 获取当前用户的 JobId
-	jobId, err := utils.GetStringFromContext(ctx, "JobId")
-	if err != nil || !utils.IsJobId(jobId) {
-		response.FailedWithCodeAndMessage(response.Forbidden, response.ForbiddenMessage)
+// 查询用户信息
+func GetUserInfoByJobId(ctx *gin.Context, jobId string) (user model.User, err error) {
+	// 获取当前用户的工号和角色关键字
+	currentUserJobId, currentUserRoleKeyword, err := utils.GetJobIdAndRoleKeywordFromContext(ctx)
+	if err != nil {
+		response.FailedWithMessage("获取当前用户的信息失败")
 		return
 	}
 
-	// 查询当前用户的用户信息
-	var user model.User
+	// 如果 jobId 为空，则表示当前用户
+	if jobId == "" {
+		jobId = currentUserJobId
+	}
+
+	// 查询用户信息
 	err = common.DB.
 		Preload("Role").
 		Preload("Department").
@@ -186,9 +195,29 @@ func GetCurrentUserInfoHandler(ctx *gin.Context) {
 		Preload("NativeProvince").
 		Preload("NativeCity").
 		Where("job_id = ?", jobId).First(&user).Error
-
 	if err != nil {
-		response.FailedWithMessage("查询当前用户的用户信息失败")
+		logx.ERROR("查询用户信息失败:", err.Error())
+		return user, fmt.Errorf("查询用户信息失败")
+	}
+
+	// 当用户开启隐藏手机号，且当前用户不是管理员，信息获取的也不是自己，则需要对手机号加密
+	if *user.ShowPhone == common.True {
+		if currentUserRoleKeyword != common.SuperAdminRoleKeyword {
+			if currentUserJobId != jobId {
+				user.Phone = utils.MaskPhone(user.Phone)
+			}
+		}
+	}
+
+	return
+}
+
+// 获取当前用户信息处理函数
+func GetCurrentUserInfoHandler(ctx *gin.Context) {
+	// 获取用户信息
+	user, err := GetUserInfoByJobId(ctx, "")
+	if err != nil {
+		response.FailedWithMessage("查询用户的信息失败")
 		return
 	}
 
@@ -199,52 +228,19 @@ func GetCurrentUserInfoHandler(ctx *gin.Context) {
 }
 
 // 获取指定用户的用户信息处理函数
-// 支持参数：dto.UserInfoRequest
 func GetSpecifyUserInfoHandler(ctx *gin.Context) {
-	// 获取当前用户的 JobId
-	jobId, err := utils.GetStringFromContext(ctx, "JobId")
-	if err != nil || !utils.IsJobId(jobId) {
-		response.FailedWithCodeAndMessage(response.Forbidden, response.ForbiddenMessage)
-		return
-	}
-
-	// 获取当前用户的角色关键字
-	roleKeyword, err := utils.GetStringFromContext(ctx, "RoleKeyword")
-	if err != nil || !utils.IsRoleKeyword(roleKeyword) {
-		response.FailedWithCodeAndMessage(response.Forbidden, response.ForbiddenMessage)
-		return
-	}
-
 	// 获取 URI 参数，并验证合法性
-	sid := ctx.Param("jobId")
-	if !utils.IsJobId(sid) {
-		response.FailedWithCodeAndMessage(response.ParamError, response.ParamErrorMessage)
+	jobId := ctx.Param("jobId")
+	if !utils.IsJobId(jobId) {
+		response.FailedWithMessage("查询用户的工号不合法")
 		return
 	}
 
-	// 查询当前用户的用户信息
-	var user model.User
-	err = common.DB.
-		Preload("Role").
-		Preload("Department").
-		Preload("OfficeProvince").
-		Preload("OfficeCity").
-		Preload("OfficeArea").
-		Preload("OfficeStreet").
-		Preload("NativeProvince").
-		Preload("NativeCity").
-		Where("job_id = ?", sid).First(&user).Error
-
+	// 获取用户信息
+	user, err := GetUserInfoByJobId(ctx, jobId)
 	if err != nil {
-		response.FailedWithMessage("查询指定用户的用户信息失败")
+		response.FailedWithMessage("查询用户的信息失败")
 		return
-	}
-
-	// 不是管理员且查询的用户不是自己，则需要检查密码是否需要隐藏
-	if roleKeyword != common.SuperAdminRoleKeyword && jobId != sid {
-		if *user.ShowPhone == common.False {
-			user.Phone = utils.MaskPhone(user.Phone)
-		}
 	}
 
 	// 响应请求

@@ -37,6 +37,9 @@ var startCmd = &cobra.Command{
 		// Redis 连接初始化
 		initialize.Redis()
 
+		// 初始化 Casbin 鉴权
+		initialize.Casbin()
+
 		// 路由初始化
 		r := initialize.Router()
 

@@ -31,7 +31,14 @@ func Router() *gin.Engine {
 
 	// 认证路由组
 	arg := r.Group(baseApiPrefix)
+	arg.Use(auth.MiddlewareFunc())
 	routes.AuthRoutes(arg, auth)
+
+	// 鉴权路由组
+	crg := r.Group(baseApiPrefix)
+	crg.Use(auth.MiddlewareFunc())
+	crg.Use(middleware.Casbin)
+	routes.CasbinRouter(crg, auth)
 
 	logx.SYSTEM("路由列表初始化完成")
 	return r

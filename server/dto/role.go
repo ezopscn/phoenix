@@ -5,4 +5,5 @@ type RoleListRequest struct {
 	Name        string `json:"name" form:"name"`
 	Keyword     string `json:"keyword" form:"keyword"`
 	Description string `json:"description" form:"description"`
+	Page
 }

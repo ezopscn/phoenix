@@ -46,9 +46,9 @@ func IsJobId(jobId string) bool {
 // 只能包含小写字母、数字和中横线
 // 不能以数字或中横线开头
 // 不能以中横线结尾
-// 长度在 2-15 位
+// 长度在 2-20 位
 func IsRoleKeyword(roleKeyword string) bool {
-	pattern := `^[a-z][a-z0-9-]{1,13}[a-z0-9]$`
+	pattern := `^[a-z][a-z0-9-]{1,18}[a-z0-9]$`
 	reg := regexp.MustCompile(pattern)
 	return reg.MatchString(roleKeyword)
 }

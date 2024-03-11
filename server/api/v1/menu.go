@@ -6,6 +6,7 @@ import (
 	"phoenix/common"
 	"phoenix/dto"
 	"phoenix/model"
+	"phoenix/pkg/logx"
 	"phoenix/pkg/response"
 	"phoenix/pkg/utils"
 	"strings"
@@ -66,8 +67,21 @@ func GetMenuListHandler(ctx *gin.Context) {
 
 	// 查询数据
 	var menus []model.Menu
-	err := dbt.Find(&menus).Error
+
+	// 判断是否分页
+	var err error
+	if !req.NoPagination {
+		// 统计记录数量
+		dbt.Find(&model.Menu{}).Count(&req.Total)
+		// 获取偏移和限制
+		limit, offset := req.GetLimitAndOffset()
+		err = dbt.Limit(limit).Offset(offset).Find(&menus).Error
+	} else {
+		err = dbt.Find(&menus).Error
+	}
+
 	if err != nil {
+		logx.ERROR("查询菜单列表失败,", err.Error())
 		response.FailedWithMessage("查询菜单列表失败")
 		return
 	}
@@ -78,12 +92,12 @@ func GetMenuListHandler(ctx *gin.Context) {
 	})
 }
 
-// 获取指定角色的菜单列表处理函数
-func GetSpecifyRoleKeywordMenuListHandler(ctx *gin.Context) {
-	// 获取 URI 参数，并验证合法性
-	roleKeyword := ctx.Param("roleKeyword")
-	if !utils.IsRoleKeyword(roleKeyword) {
-		response.FailedWithCodeAndMessage(response.ParamError, response.ParamErrorMessage)
+// 获取当前用户的菜单树
+func GetCurrentUserMenuTreeHandler(ctx *gin.Context) {
+	// 获取当前用户的角色信息
+	roleKeyword, err := utils.GetRoleKeywordFromContext(ctx)
+	if err != nil {
+		response.FailedWithMessage("获取当前用户的角色信息失败")
 		return
 	}
 
@@ -94,6 +108,42 @@ func GetSpecifyRoleKeywordMenuListHandler(ctx *gin.Context) {
 		return
 	}
 
+	// 响应
+	response.SuccessWithData(gin.H{
+		"tree": menus,
+	})
+}
+
+// 获取指定角色的菜单列表处理函数
+func GetSpecifyRoleMenuListHandler(ctx *gin.Context) {
+	// 获取 URI 参数，并验证合法性
+	roleKeyword := ctx.Param("roleKeyword")
+	if !utils.IsRoleKeyword(roleKeyword) {
+		response.FailedWithMessage("查询菜单列表的角色关键字不合法")
+		return
+	}
+
+	// 查询数据
+	var menus []model.Menu
+	var err error
+
+	// 管理员默认所有菜单
+	if roleKeyword == common.SuperAdminRoleKeyword {
+		err = common.DB.Find(&menus).Error
+	} else {
+		var role model.Role
+		err = common.DB.Preload("Menus").Where("keyword = ?", roleKeyword).First(&role).Error
+		if err == nil {
+			menus = role.Menus
+		}
+	}
+
+	if err != nil {
+		logx.ERROR("查询角色的菜单列表失败,", err.Error())
+		response.FailedWithMessage("查询角色的菜单列表失败")
+		return
+	}
+
 	// 响应请求
 	response.SuccessWithData(gin.H{
 		"list": menus,
@@ -101,7 +151,7 @@ func GetSpecifyRoleKeywordMenuListHandler(ctx *gin.Context) {
 }
 
 // 获取菜单的详细信息处理函数
-func GetMenuInfoHandler(ctx *gin.Context) {
+func GetSpecifyMenuInfoHandler(ctx *gin.Context) {
 	// 获取 URI 参数，并验证合法性
 	sid := ctx.Param("menuId")
 	menuId, err := utils.ConvertStringToUint(sid)
@@ -114,6 +164,7 @@ func GetMenuInfoHandler(ctx *gin.Context) {
 	var menu model.Menu
 	err = common.DB.Where("id = ?", menuId).First(&menu).Error
 	if err != nil {
+		logx.ERROR("查询菜单详细信息失败,", err.Error())
 		response.FailedWithMessage("查询菜单详细信息失败")
 		return
 	}

@@ -1,6 +1,7 @@
 package common
 
 import (
+	"github.com/casbin/casbin/v2"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )
@@ -9,6 +10,7 @@ import (
 var (
 	Version                    = "1.0"                 // 当前版本
 	ConfigFile                 = "config/default.yaml" // 默认配置文件
+	CasbinFile                 = "config/rbac.conf"    // Casbin 配置
 	VersionFile                = "config/version"      // 版本文件
 	SuperAdminRoleKeyword      = "administrator"       // 系统超级管理员角色关键字，系统预留
 	DefaultPageSize       uint = 1                     // 默认每页显示的数据量
@@ -17,6 +19,7 @@ var (
 
 // 全局工具
 var (
-	DB    *gorm.DB      // 数据库连接
-	Cache *redis.Client // 缓存连接
+	DB             *gorm.DB         // 数据库连接
+	Cache          *redis.Client    // 缓存连接
+	CasbinEnforcer *casbin.Enforcer // Casbin 实例
 )
