@@ -1,10 +1,11 @@
 import React from "react";
 import "../../assets/css/login-black.less";
-import { Button, Checkbox, Divider, Form, Input } from "antd";
+import { Button, Checkbox, Divider, Form, Input, Space } from "antd";
 import { LogoWithTitle } from "../../common/Resource.jsx";
 import {
   InsuranceOutlined,
   LockOutlined,
+  MailOutlined,
   UserOutlined,
 } from "@ant-design/icons"; // 用户登录页
 
@@ -61,15 +62,23 @@ const LoginBlack = () => {
                     className="login-input"
                     prefix={<LockOutlined className="site-form-item-icon" />}
                     type="password"
-                    placeholder="用户密码"
+                    placeholder="密码"
                   />
                 </Form.Item>
 
-                <Form.Item>
+                <Form.Item
+                  name="code"
+                  rules={[
+                    {
+                      required: true,
+                      message: "请输入您的验证码!",
+                    },
+                  ]}
+                >
                   <Input
                     className="login-input"
                     prefix={<InsuranceOutlined />}
-                    placeholder="VIP ACCESS 验证码"
+                    placeholder="验证码"
                   />
                 </Form.Item>
 
@@ -79,7 +88,7 @@ const LoginBlack = () => {
                 {/*      prefix={<MailOutlined className="site-forms-item-icon" />}*/}
                 {/*      placeholder="输入验证码"*/}
                 {/*      style={{*/}
-                {/*        width: 'calc(330px - 108px)',*/}
+                {/*        width: "calc(330px - 108px)",*/}
                 {/*      }}*/}
                 {/*    />*/}
                 {/*    <Button*/}
