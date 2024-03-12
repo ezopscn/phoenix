@@ -1,7 +1,7 @@
 import React from "react";
 import ButterflyLayout from "../components/layout/Layout.jsx";
 import RouteLazyLoad from "./RouteLazyLoad.jsx";
-import {Navigate} from "react-router";
+import { Navigate } from "react-router";
 
 // 路由数据
 export const RouteData = [
@@ -22,7 +22,7 @@ export const RouteData = [
       {
         path: "node",
         element: RouteLazyLoad(
-            React.lazy(() => import("../pages/kubernetes/node/Node.jsx")),
+          React.lazy(() => import("../pages/kubernetes/node/Node.jsx")),
         ),
       },
       {
@@ -36,28 +36,34 @@ export const RouteData = [
           },
         ],
       },
-      {
-        path: "403",
-        element: RouteLazyLoad(
-          React.lazy(() => import("../pages/error/403.jsx")),
-        ),
-      },
-      {
-        path: "404",
-        element: RouteLazyLoad(
-          React.lazy(() => import("../pages/error/404.jsx")),
-        ),
-      },
-      {
-        path: "500",
-        element: RouteLazyLoad(
-          React.lazy(() => import("../pages/error/500.jsx")),
-        ),
-      },
     ],
+  },
+  // 无需登录的地址
+  {
+    path: "login",
+    element: RouteLazyLoad(
+      React.lazy(() => import("../pages/login/LoginBlack.jsx")),
+    ),
+    notNeedAuth: true,
+  },
+  {
+    path: "403",
+    element: RouteLazyLoad(React.lazy(() => import("../pages/error/403.jsx"))),
+    notNeedAuth: true,
+  },
+  {
+    path: "404",
+    element: RouteLazyLoad(React.lazy(() => import("../pages/error/404.jsx"))),
+    notNeedAuth: true,
+  },
+  {
+    path: "500",
+    element: RouteLazyLoad(React.lazy(() => import("../pages/error/500.jsx"))),
+    notNeedAuth: true,
   },
   {
     path: "*",
     element: <Navigate to="/404" />,
+    notNeedAuth: true,
   },
 ];

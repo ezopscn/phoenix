@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Avatar, Badge, Descriptions, Space, Table, Tag } from "antd";
 import { UserStates } from "../../store/Store.jsx";
 import { useSnapshot } from "valtio";
