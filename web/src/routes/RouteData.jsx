@@ -42,7 +42,7 @@ export const RouteData = [
   {
     path: "login",
     element: RouteLazyLoad(
-      React.lazy(() => import("../pages/login/LoginBlack.jsx")),
+      React.lazy(() => import("../pages/login/Login.jsx")),
     ),
     notNeedAuth: true,
   },

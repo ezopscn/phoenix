@@ -147,8 +147,7 @@ const ButterflyLayout = () => {
           <Outlet />
         </Content>
         <Footer className="admin-footer">
-          <img src={Logo} style={{ width: "15px" }} alt="" /> <b>PHOENIX </b>©
-          2024 EZOPS.CN, All Rights Reserved.
+          <b>🧬 PHOENIX </b>© 2024 EZOPS.CN, All Rights Reserved.
         </Footer>
       </Layout>
     </Layout>
