@@ -1,7 +1,7 @@
 import React from "react";
-import ButterflyLayout from "../components/layout/Layout.jsx";
 import RouteLazyLoad from "./RouteLazyLoad.jsx";
 import { Navigate } from "react-router";
+import PhoenixLayout from "../components/layout/Layout.jsx"; // 路由数据
 
 // 路由数据
 export const RouteData = [
@@ -11,7 +11,7 @@ export const RouteData = [
   },
   {
     path: "/",
-    element: <ButterflyLayout />,
+    element: <PhoenixLayout />,
     children: [
       {
         path: "dashboard",

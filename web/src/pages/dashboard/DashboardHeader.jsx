@@ -1,6 +1,7 @@
 import React from "react";
 import { Avatar, Statistic } from "antd";
 import DefaultAvatar from "../../assets/image/avatar/default.png";
+import { UserStates } from "../../store/Store.jsx";
 
 // 问候语
 function getHelloWord(name) {
@@ -27,7 +28,12 @@ function getHelloWord(name) {
 // 工作台 Header
 const DashboardHeader = () => {
   // 问候语
-  let hello = getHelloWord("吴彦祖");
+  let hello = getHelloWord(
+    UserStates.CurrentUserInfo.cn_name +
+      "（" +
+      UserStates.CurrentUserInfo.en_name +
+      "）",
+  );
 
   // 面包屑
   const items = [

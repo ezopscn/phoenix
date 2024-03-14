@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Outlet, useNavigate } from "react-router";
-import { Avatar, Cascader, Dropdown, Layout, Menu } from "antd";
+import { Avatar, Cascader, Dropdown, Layout, Menu, message } from "antd";
 import { Logo, LogoWithTitle } from "../../common/Resource.jsx";
-import DefaultAvatar from "../../assets/image/avatar/default.png";
-import { LayoutDropdownMenuData, LayoutMenuData } from "./LayoutData.jsx";
+import { LayoutMenuData } from "./LayoutData.jsx";
+import { LogoutRequest } from "../../utils/RequestAPI.jsx";
 
 const { Header, Sider, Content, Footer } = Layout;
 
-const ButterflyLayout = () => {
+const PhoenixLayout = () => {
   // 菜单宽度
   const menuWidth = 240;
   const menuCollapsedWidth = 60;
@@ -86,6 +86,55 @@ const ButterflyLayout = () => {
       (option) =>
         option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1,
     );
+
+  // 用户登出方法
+  const logoutHandler = async () => {
+    try {
+      const res = await LogoutRequest();
+      if (res.code === 200) {
+        localStorage.clear();
+        message.success("用户注销成功");
+        navigate("/login");
+      } else {
+        message.error(res.message);
+      }
+    } catch (e) {
+      message.error("服务器异常，请联系管理员");
+    }
+  };
+
+  // 下拉菜单
+  const LayoutDropdownMenuData = [
+    {
+      key: "1",
+      label: (
+        <a rel="noopener noreferrer" href="">
+          @Jayce Kuang
+        </a>
+      ),
+      disabled: true,
+    },
+    {
+      type: "divider",
+    },
+    {
+      key: "2",
+      label: (
+        <a rel="noopener noreferrer" href="">
+          联系我们
+        </a>
+      ),
+    },
+    {
+      key: "3",
+      label: (
+        <a rel="noopener noreferrer" onClick={logoutHandler}>
+          注销登录
+        </a>
+      ),
+    },
+  ];
+
   return (
     <Layout>
       <Sider
@@ -138,7 +187,7 @@ const ButterflyLayout = () => {
           <div className="admin-header-menu">
             <Dropdown menu={{ items: LayoutDropdownMenuData }}>
               <div className="admin-header-dropdown">
-                <Avatar src={DefaultAvatar} size={28} />
+                <Avatar src="" size={28} />
               </div>
             </Dropdown>
           </div>
@@ -154,4 +203,4 @@ const ButterflyLayout = () => {
   );
 };
 
-export default ButterflyLayout;
+export default PhoenixLayout;

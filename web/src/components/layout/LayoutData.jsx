@@ -70,35 +70,3 @@ export const LayoutMenuData = [
   getItem("个人中心", "/me", <UserOutlined />),
   getItem("获取帮助", "/help", <FileProtectOutlined />),
 ];
-
-// 下拉菜单
-export const LayoutDropdownMenuData = [
-  {
-    key: "1",
-    label: (
-      <a rel="noopener noreferrer" href="">
-        @Jayce Kuang
-      </a>
-    ),
-    disabled: true,
-  },
-  {
-    type: "divider",
-  },
-  {
-    key: "2",
-    label: (
-      <a rel="noopener noreferrer" href="">
-        联系我们
-      </a>
-    ),
-  },
-  {
-    key: "10",
-    label: (
-      <a rel="noopener noreferrer" href="">
-        注销登录
-      </a>
-    ),
-  },
-];

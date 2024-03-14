@@ -17,6 +17,7 @@ export const RoleStates = proxy({
 
 // 用户
 export const UserStates = proxy({
+  CurrentUserInfo: {}, // 当前用户信息
   UserSearchFieldExpand: false, //是否展开所有搜索字段
   UserListSearchParams: {}, // 用户搜索参数
 });

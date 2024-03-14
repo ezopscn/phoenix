@@ -1,23 +1,37 @@
 import React from "react";
 import "../../assets/css/login.less";
-import { Button, Checkbox, Divider, Form, Input, Space } from "antd";
+import { Button, Checkbox, Divider, Form, Input, message, Space } from "antd";
 import { LogoWithTitleNoBg } from "../../common/Resource.jsx";
 import {
+  DingtalkOutlined,
   InsuranceOutlined,
   LockOutlined,
   MailOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { APIConfig } from "../../common/Config.jsx";
+import { LoginRequest } from "../../utils/RequestAPI.jsx";
+import { SetToken } from "../../utils/Token.jsx";
+import { useNavigate } from "react-router";
 
 // 用户登录页
 const Login = () => {
-  const LoginHandler = (values) => {
-    console.log("Success:", values);
-  };
+  // 路由跳转
+  const navigate = useNavigate();
 
-  console.log(APIConfig.RunEnv);
-  console.log(APIConfig.LoginAPI);
+  // 登录请求
+  const loginHandler = async (data) => {
+    try {
+      const res1 = await LoginRequest(data);
+      if (res1.code === 200) {
+        SetToken(res1.data.token, res1.data.expire);
+        navigate("/");
+      } else {
+        message.error(res1.message);
+      }
+    } catch (e) {
+      message.error("服务器异常，请联系管理员");
+    }
+  };
 
   return (
     <>
@@ -36,9 +50,10 @@ const Login = () => {
                   initialValues={{
                     remember: true,
                   }}
-                  onFinish={LoginHandler}
+                  onFinish={loginHandler}
                 >
                   <Form.Item
+                    className="login-form-item"
                     name="account"
                     rules={[
                       {
@@ -55,6 +70,7 @@ const Login = () => {
                     />
                   </Form.Item>
                   <Form.Item
+                    className="login-form-item"
                     name="password"
                     rules={[
                       {
@@ -64,6 +80,7 @@ const Login = () => {
                     ]}
                   >
                     <Input.Password
+                      autoComplete="off"
                       className="login-input"
                       prefix={<LockOutlined className="site-form-item-icon" />}
                       type="password"
@@ -71,7 +88,9 @@ const Login = () => {
                     />
                   </Form.Item>
 
+                  {/*手机令牌方式*/}
                   <Form.Item
+                    className="login-form-item"
                     name="code"
                     rules={[
                       {
@@ -81,20 +100,23 @@ const Login = () => {
                     ]}
                   >
                     <Input
+                      autoComplete="off"
                       className="login-input"
                       prefix={<InsuranceOutlined />}
-                      placeholder="验证码"
+                      placeholder="手机令牌验证码"
                     />
                   </Form.Item>
 
+                  {/*邮件短信获取验证码方式*/}
                   <Form.Item>
                     <Space direction="horizontal">
                       <Input
+                        autoComplete="off"
                         className="login-input"
                         prefix={
                           <MailOutlined className="site-forms-item-icon" />
                         }
-                        placeholder="输入验证码"
+                        placeholder="邮件 / 短信验证码"
                         style={{
                           width: "calc(310px - 108px)",
                         }}
@@ -105,7 +127,7 @@ const Login = () => {
                     </Space>
                   </Form.Item>
 
-                  <Form.Item>
+                  <Form.Item className="login-remember-item">
                     <Form.Item name="remember" valuePropName="checked" noStyle>
                       <Checkbox>记住密码</Checkbox>
                     </Form.Item>
@@ -125,6 +147,14 @@ const Login = () => {
                       登录
                     </Button>
                   </Form.Item>
+
+                  <Divider className="login-line-change">
+                    或者使用钉钉扫码直接登录
+                  </Divider>
+
+                  <Button block>
+                    <DingtalkOutlined /> 切换到钉钉扫码登录
+                  </Button>
                 </Form>
               </div>
             </div>

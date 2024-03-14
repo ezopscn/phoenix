@@ -5,9 +5,7 @@ WORKDIR /app
 # 将项目复制到工作目录，排除某些目录
 COPY . ./
 # 打包
-RUN npm config set proxy null && \
-    npm config set https-proxy null && \
-    npm config set registry https://registry.npmmirror.com &&  \
+RUN npm config set registry https://registry.npmmirror.com &&  \
     npm i &&  \
     npm run build
 
