@@ -1,6 +1,5 @@
 // axios 请求封装
 import axios from "axios";
-import { APIConfig } from "../common/Config.jsx";
 import { GetToken } from "./Token.jsx";
 
 // 创建实例

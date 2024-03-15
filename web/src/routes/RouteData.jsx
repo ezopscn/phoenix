@@ -1,7 +1,8 @@
 import React from "react";
 import RouteLazyLoad from "./RouteLazyLoad.jsx";
 import { Navigate } from "react-router";
-import PhoenixLayout from "../components/layout/Layout.jsx"; // 路由数据
+import AdminLayout from "../components/layout/Layout.jsx";
+import ErrorLayout from "../components/error/ErrorLayout.jsx";
 
 // 路由数据
 export const RouteData = [
@@ -11,7 +12,7 @@ export const RouteData = [
   },
   {
     path: "/",
-    element: <PhoenixLayout />,
+    element: <AdminLayout />,
     children: [
       {
         path: "dashboard",
@@ -47,23 +48,35 @@ export const RouteData = [
     notNeedAuth: true,
   },
   {
-    path: "403",
-    element: RouteLazyLoad(React.lazy(() => import("../pages/error/403.jsx"))),
-    notNeedAuth: true,
-  },
-  {
-    path: "404",
-    element: RouteLazyLoad(React.lazy(() => import("../pages/error/404.jsx"))),
-    notNeedAuth: true,
-  },
-  {
-    path: "500",
-    element: RouteLazyLoad(React.lazy(() => import("../pages/error/500.jsx"))),
-    notNeedAuth: true,
+    path: "error",
+    element: <ErrorLayout />,
+    children: [
+      {
+        path: "403",
+        element: RouteLazyLoad(
+          React.lazy(() => import("../pages/error/403.jsx")),
+        ),
+        notNeedAuth: true,
+      },
+      {
+        path: "404",
+        element: RouteLazyLoad(
+          React.lazy(() => import("../pages/error/404.jsx")),
+        ),
+        notNeedAuth: true,
+      },
+      {
+        path: "500",
+        element: RouteLazyLoad(
+          React.lazy(() => import("../pages/error/500.jsx")),
+        ),
+        notNeedAuth: true,
+      },
+    ],
   },
   {
     path: "*",
-    element: <Navigate to="/404" />,
+    element: <Navigate to="/error/404" />,
     notNeedAuth: true,
   },
 ];

@@ -1,13 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
 import { Avatar, Cascader, Dropdown, Layout, Menu, message } from "antd";
 import { Logo, LogoWithTitle } from "../../common/Resource.jsx";
 import { LayoutMenuData } from "./LayoutData.jsx";
-import { LogoutRequest } from "../../utils/RequestAPI.jsx";
+import {
+  CurrentUserInfoRequest,
+  LogoutRequest,
+} from "../../utils/RequestAPI.jsx";
+import { UserStates } from "../../store/Store.jsx";
+import { useSnapshot } from "valtio";
+import {
+  GetLocalStorageItem,
+  SetLocalStorageItem,
+} from "../../utils/Storage.jsx";
+import { MoreOutlined } from "@ant-design/icons";
 
 const { Header, Sider, Content, Footer } = Layout;
 
-const PhoenixLayout = () => {
+const AdminLayout = () => {
   // 菜单宽度
   const menuWidth = 240;
   const menuCollapsedWidth = 60;
@@ -15,6 +25,29 @@ const PhoenixLayout = () => {
   // 菜单跳转
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
+
+  // 获取用户信息，为了减少获取次数，会将数据保存到 storage 一段时间，默认取缓存中数据
+  useEffect(() => {
+    (async () => {
+      try {
+        let cacheKeyName = "user_info";
+        let userInfo = GetLocalStorageItem(cacheKeyName);
+        if (userInfo === null) {
+          const res = await CurrentUserInfoRequest();
+          if (res.code === 200) {
+            userInfo = res.data.info;
+            SetLocalStorageItem(cacheKeyName, userInfo, 60); // 有效期 60 秒
+          } else {
+            message.error(res.message);
+          }
+        }
+        UserStates.CurrentUserInfo = userInfo;
+      } catch (e) {
+        console.log(e);
+        message.error("服务器异常，请联系管理员");
+      }
+    })();
+  }, []);
 
   // 级联筛选集群和名称空间
   const clustersAndNamespacesData = [
@@ -103,13 +136,16 @@ const PhoenixLayout = () => {
     }
   };
 
+  // 用户数据
+  const { CurrentUserInfo } = useSnapshot(UserStates);
+
   // 下拉菜单
   const LayoutDropdownMenuData = [
     {
       key: "1",
       label: (
         <a rel="noopener noreferrer" href="">
-          @Jayce Kuang
+          @{CurrentUserInfo?.en_name}（{CurrentUserInfo?.cn_name}）
         </a>
       ),
       disabled: true,
@@ -187,7 +223,8 @@ const PhoenixLayout = () => {
           <div className="admin-header-menu">
             <Dropdown menu={{ items: LayoutDropdownMenuData }}>
               <div className="admin-header-dropdown">
-                <Avatar src="" size={28} />
+                <Avatar src={CurrentUserInfo?.avatar} size={28} />
+                <MoreOutlined />
               </div>
             </Dropdown>
           </div>
@@ -203,4 +240,4 @@ const PhoenixLayout = () => {
   );
 };
 
-export default PhoenixLayout;
+export default AdminLayout;

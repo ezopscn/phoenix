@@ -29,9 +29,9 @@ function getHelloWord(name) {
 const DashboardHeader = () => {
   // 问候语
   let hello = getHelloWord(
-    UserStates.CurrentUserInfo.cn_name +
+    UserStates.CurrentUserInfo?.cn_name +
       "（" +
-      UserStates.CurrentUserInfo.en_name +
+      UserStates.CurrentUserInfo?.en_name +
       "）",
   );
 

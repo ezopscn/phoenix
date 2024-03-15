@@ -1,9 +1,11 @@
 import React from "react";
+import ServerErrorImage from "../../assets/image/error/500.svg";
 
 const ServerError = () => {
   return (
     <>
-      <h1>Hello</h1>
+      <div className="error-code">500</div>
+      <img src={ServerErrorImage} alt="" />
     </>
   );
 };
