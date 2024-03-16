@@ -18,7 +18,7 @@ const NodeNotices = () => {
               等集群管理核心组件。
             </li>
             <li>
-              部署工作负载的 Worker（也叫
+              部署工作负载（Workload）的 Worker（也叫
               Node）节点，主要运行容器运行时、Kubelet 以及 Kube-proxy
               等系统组件和业务 Pod。
             </li>

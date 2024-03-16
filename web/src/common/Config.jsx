@@ -7,6 +7,7 @@ const APIConfig = {
   LoginAPI: backendUrl + "/login", // 登录接口
   LogoutAPI: backendUrl + "/logout", // 登出接口
   CurrentUserInfoAPI: backendUrl + "/user/info", // 当前用户信息接口
+  CurrentUserDepartmentInfoAPI: backendUrl + "/department/info", // 当前用户部门信息接口
 };
 
 export { APIConfig };

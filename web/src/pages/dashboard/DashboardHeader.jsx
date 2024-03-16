@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
-import { Avatar, Statistic } from "antd";
+import React, { useEffect, useState } from "react";
+import { Avatar, message, Statistic } from "antd";
 import { UserStates } from "../../store/Store.jsx";
 import { useSnapshot } from "valtio";
+import { CurrentUserDepartmentInfoRequest } from "../../utils/RequestAPI.jsx";
 
 // 问候语
 function getHelloWord(name) {
@@ -28,19 +29,46 @@ function getHelloWord(name) {
   return hello;
 }
 
+// 组合部门信息
+function getDepartmentNames(data) {
+  if (!data.children) {
+    return data.name;
+  }
+
+  const names = [];
+  for (const child of data.children) {
+    names.push(getDepartmentNames(child));
+  }
+
+  return data.name + " - " + names.join("-");
+}
+
 // 工作台 Header
 const DashboardHeader = () => {
+  const [departmentNames, setDepartmentNames] = useState("未知");
   const { CurrentUserInfo } = useSnapshot(UserStates);
 
-  // 解决子组件获取数据延时，数据更新后不随着父组件一起刷新的问题
-  useEffect(() => {}, [CurrentUserInfo]);
+  // 获取用户部门
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await CurrentUserDepartmentInfoRequest();
+        if (res.code === 200) {
+          setDepartmentNames(getDepartmentNames(res.data.info));
+        } else {
+          message.error(res.message);
+        }
+      } catch (e) {
+        console.log(e);
+        message.error("服务器异常，请联系管理员");
+      }
+    })();
+  }, []);
 
   // 问候语
   let hello = getHelloWord(
     CurrentUserInfo?.cn_name + "（" + CurrentUserInfo?.en_name + "）",
   );
-
-  // 获取用户部门
 
   return (
     <>
@@ -51,8 +79,7 @@ const DashboardHeader = () => {
         <div className="admin-info">
           <div className="admin-welcome">{hello}</div>
           <div className="admin-desc">
-            {UserStates.CurrentUserInfo?.job_name} | 深圳运维集团 －
-            产品研发中心 － 运维组 － DevOPS 团队
+            {UserStates.CurrentUserInfo?.job_name} | {departmentNames}
           </div>
         </div>
       </div>

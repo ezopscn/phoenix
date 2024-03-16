@@ -26,27 +26,25 @@ const AdminLayout = () => {
   const { CurrentUserInfo } = useSnapshot(UserStates);
 
   // 获取用户信息
-  const getCurrentUserInfoHandler = async () => {
-    try {
-      const res = await CurrentUserInfoRequest();
-      if (res.code === 200) {
-        UserStates.CurrentUserInfo = res.data.info;
-      } else if (res.code === 1000) {
-        message.error("用户认证失效，请重新登录");
-        localStorage.clear();
-        navigate("/login");
-      } else {
-        message.error(res.message);
-      }
-    } catch (e) {
-      console.log(e);
-      message.error("服务器异常，请联系管理员");
-    }
-  };
-
   useEffect(() => {
-    getCurrentUserInfoHandler().then((v) => {});
-  }, [CurrentUserInfo]);
+    (async () => {
+      try {
+        const res = await CurrentUserInfoRequest();
+        if (res.code === 200) {
+          UserStates.CurrentUserInfo = res.data.info;
+        } else if (res.code === 1000) {
+          message.error("用户认证失效，请重新登录");
+          localStorage.clear();
+          navigate("/login");
+        } else {
+          message.error(res.message);
+        }
+      } catch (e) {
+        console.log(e);
+        message.error("服务器异常，请联系管理员");
+      }
+    })();
+  }, []);
 
   // 级联筛选集群和名称空间
   const clustersAndNamespacesData = [
