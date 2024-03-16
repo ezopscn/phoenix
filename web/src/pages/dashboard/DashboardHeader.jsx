@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Avatar, message, Statistic } from "antd";
 import { UserStates } from "../../store/Store.jsx";
 import { useSnapshot } from "valtio";
-import { CurrentUserDepartmentInfoRequest } from "../../utils/RequestAPI.jsx";
+import {
+  CurrentUserDepartmentInfoRequest,
+  UserCountRequest,
+} from "../../utils/RequestAPI.jsx";
 
 // 问候语
 function getHelloWord(name) {
@@ -46,15 +49,31 @@ function getDepartmentNames(data) {
 // 工作台 Header
 const DashboardHeader = () => {
   const [departmentNames, setDepartmentNames] = useState("未知");
+  const [userCount, setUserCount] = useState(0);
   const { CurrentUserInfo } = useSnapshot(UserStates);
 
-  // 获取用户部门
   useEffect(() => {
+    // 获取用户部门
     (async () => {
       try {
         const res = await CurrentUserDepartmentInfoRequest();
         if (res.code === 200) {
           setDepartmentNames(getDepartmentNames(res.data.info));
+        } else {
+          message.error(res.message);
+        }
+      } catch (e) {
+        console.log(e);
+        message.error("服务器异常，请联系管理员");
+      }
+    })();
+
+    // 获取用户总数
+    (async () => {
+      try {
+        const res = await UserCountRequest();
+        if (res.code === 200) {
+          setUserCount(res.data.count);
         } else {
           message.error(res.message);
         }
@@ -70,30 +89,36 @@ const DashboardHeader = () => {
     CurrentUserInfo?.cn_name + "（" + CurrentUserInfo?.en_name + "）",
   );
 
+  // 入职天数计算
+  var joinTime = CurrentUserInfo?.join_time;
+  const today = new Date();
+  const diffTime = today.getTime() - new Date(joinTime).getTime();
+  const joinDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
   return (
     <>
       <div className="admin-left">
         <div className="admin-avatar">
-          <Avatar src={UserStates.CurrentUserInfo?.avatar} size={60} />
+          <Avatar src={CurrentUserInfo?.avatar} size={60} />
         </div>
         <div className="admin-info">
           <div className="admin-welcome">{hello}</div>
           <div className="admin-desc">
-            {UserStates.CurrentUserInfo?.job_name} | {departmentNames}
+            {CurrentUserInfo?.job_name} | {departmentNames}
           </div>
         </div>
       </div>
       <div className="admin-right">
         <Statistic
           title="用户数量"
-          value={1024}
+          value={userCount}
           style={{
             marginRight: 30,
           }}
         />
         <Statistic
           title="入职天数"
-          value={65535}
+          value={joinDays}
           style={{
             marginRight: 30,
           }}

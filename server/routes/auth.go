@@ -13,6 +13,7 @@ func AuthRoutes(rg *gin.RouterGroup, auth *jwt.GinJWTMiddleware) gin.IRoutes {
 	rg.GET("/region/province/:provinceId/city/list", v1.CityListByProvinceIdHandler) // 获取地级市列表
 	rg.GET("/region/city/:cityId/area/list", v1.AreaListByCityIdHandler)             // 获取行政区列表
 	rg.GET("/region/area/:areaId/street/list", v1.StreetListByAreaIdHandler)         // 获取街道列表
+	rg.GET("/user/count", v1.GetUserCountHandler)                                    // 获取用户总数
 	rg.GET("/user/info", v1.GetCurrentUserInfoHandler)                               // 获取当前用户的用户详情
 	rg.GET("/role/info", v1.GetCurrentUserRoleInfoHandler)                           // 获取当前用户的角色详情
 	rg.GET("/menu/tree", v1.GetCurrentUserMenuTreeHandler)                           // 获取当前用户的菜单树

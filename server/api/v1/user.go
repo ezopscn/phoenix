@@ -12,6 +12,19 @@ import (
 	"strings"
 )
 
+// 获取用户总量处理函数
+func GetUserCountHandler(ctx *gin.Context) {
+	var count int64
+	err := common.DB.Model(&model.User{}).Count(&count).Error
+	if err != nil {
+		response.FailedWithMessage("查询用户总数失败")
+		return
+	}
+	response.SuccessWithData(gin.H{
+		"count": count,
+	})
+}
+
 // 获取用户列表处理函数
 func GetUserListHandler(ctx *gin.Context) {
 	// 获取请求参数
