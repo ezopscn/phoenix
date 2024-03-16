@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Avatar, Statistic } from "antd";
 import { UserStates } from "../../store/Store.jsx";
+import { useSnapshot } from "valtio";
 
 // 问候语
 function getHelloWord(name) {
@@ -29,16 +30,17 @@ function getHelloWord(name) {
 
 // 工作台 Header
 const DashboardHeader = () => {
+  const { CurrentUserInfo } = useSnapshot(UserStates);
+
+  // 解决子组件获取数据延时，数据更新后不随着父组件一起刷新的问题
+  useEffect(() => {}, [CurrentUserInfo]);
+
   // 问候语
   let hello = getHelloWord(
-    UserStates.CurrentUserInfo?.cn_name +
-      "（" +
-      UserStates.CurrentUserInfo?.en_name +
-      "）",
+    CurrentUserInfo?.cn_name + "（" + CurrentUserInfo?.en_name + "）",
   );
 
   // 获取用户部门
-  console.log(UserStates.CurrentUserInfo);
 
   return (
     <>

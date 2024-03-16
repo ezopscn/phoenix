@@ -22,6 +22,9 @@ const AdminLayout = () => {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
 
+  // 用户数据
+  const { CurrentUserInfo } = useSnapshot(UserStates);
+
   // 获取用户信息
   const getCurrentUserInfoHandler = async () => {
     try {
@@ -43,7 +46,7 @@ const AdminLayout = () => {
 
   useEffect(() => {
     getCurrentUserInfoHandler().then((v) => {});
-  }, []);
+  }, [CurrentUserInfo]);
 
   // 级联筛选集群和名称空间
   const clustersAndNamespacesData = [
@@ -131,9 +134,6 @@ const AdminLayout = () => {
       message.error("服务器异常，请联系管理员");
     }
   };
-
-  // 用户数据
-  const { CurrentUserInfo } = useSnapshot(UserStates);
 
   // 下拉菜单
   const LayoutDropdownMenuData = [
