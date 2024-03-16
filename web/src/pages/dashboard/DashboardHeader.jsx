@@ -37,6 +37,9 @@ const DashboardHeader = () => {
       "）",
   );
 
+  // 获取用户部门
+  console.log(UserStates.CurrentUserInfo);
+
   return (
     <>
       <div className="admin-left">
@@ -46,8 +49,8 @@ const DashboardHeader = () => {
         <div className="admin-info">
           <div className="admin-welcome">{hello}</div>
           <div className="admin-desc">
-            高级运维工程师 | 深圳运维集团 － 产品研发中心 － 运维组 － DevOPS
-            团队
+            {UserStates.CurrentUserInfo?.job_name} | 深圳运维集团 －
+            产品研发中心 － 运维组 － DevOPS 团队
           </div>
         </div>
       </div>

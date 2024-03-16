@@ -15,8 +15,12 @@ const userListColumns = [
     render: (text) => <Avatar src={text} size={18} />,
   },
   {
-    title: "姓名",
-    dataIndex: "name",
+    title: "英文名",
+    dataIndex: "en_name",
+  },
+  {
+    title: "中文名",
+    dataIndex: "cn_name",
   },
   {
     title: "性别",

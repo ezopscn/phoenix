@@ -122,10 +122,10 @@ func payloadFunc(data interface{}) jwt.MapClaims {
 			"CNName":        user.CNName,       // 中文名
 			"Phone":         user.Phone,        // 用户手机
 			"Email":         user.Email,        // 邮箱
-			"Avatar":        user.Avatar,       // 头像
 			"RoleId":        user.Role.Id,      // 角色 Id
 			"RoleName":      user.Role.Name,    // 角色名称
 			"RoleKeyword":   user.Role.Keyword, // 角色关键字
+			"DepartmentId":  user.DepartmentId, // 部门 Id
 		}
 	}
 	return jwt.MapClaims{}

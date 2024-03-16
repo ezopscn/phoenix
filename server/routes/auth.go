@@ -16,6 +16,7 @@ func AuthRoutes(rg *gin.RouterGroup, auth *jwt.GinJWTMiddleware) gin.IRoutes {
 	rg.GET("/user/info", v1.GetCurrentUserInfoHandler)                               // 获取当前用户的用户详情
 	rg.GET("/role/info", v1.GetCurrentUserRoleInfoHandler)                           // 获取当前用户的角色详情
 	rg.GET("/menu/tree", v1.GetCurrentUserMenuTreeHandler)                           // 获取当前用户的菜单树
+	rg.GET("/department/info", v1.GetCurrentUserDepartmentInfo)                      // 获取当前用户的部门信息
 
 	return rg
 }

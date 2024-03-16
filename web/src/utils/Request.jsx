@@ -1,6 +1,8 @@
 // axios 请求封装
 import axios from "axios";
 import { GetToken } from "./Token.jsx";
+import { useNavigate } from "react-router";
+import { message } from "antd";
 
 // 创建实例
 const instance = axios.create({

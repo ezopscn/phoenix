@@ -9,10 +9,6 @@ import {
 } from "../../utils/RequestAPI.jsx";
 import { UserStates } from "../../store/Store.jsx";
 import { useSnapshot } from "valtio";
-import {
-  GetLocalStorageItem,
-  SetLocalStorageItem,
-} from "../../utils/Storage.jsx";
 import { MoreOutlined } from "@ant-design/icons";
 
 const { Header, Sider, Content, Footer } = Layout;
@@ -26,27 +22,27 @@ const AdminLayout = () => {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
 
-  // 获取用户信息，为了减少获取次数，会将数据保存到 storage 一段时间，默认取缓存中数据
-  useEffect(() => {
-    (async () => {
-      try {
-        let cacheKeyName = "user_info";
-        let userInfo = GetLocalStorageItem(cacheKeyName);
-        if (userInfo === null) {
-          const res = await CurrentUserInfoRequest();
-          if (res.code === 200) {
-            userInfo = res.data.info;
-            SetLocalStorageItem(cacheKeyName, userInfo, 60); // 有效期 60 秒
-          } else {
-            message.error(res.message);
-          }
-        }
-        UserStates.CurrentUserInfo = userInfo;
-      } catch (e) {
-        console.log(e);
-        message.error("服务器异常，请联系管理员");
+  // 获取用户信息
+  const getCurrentUserInfoHandler = async () => {
+    try {
+      const res = await CurrentUserInfoRequest();
+      if (res.code === 200) {
+        UserStates.CurrentUserInfo = res.data.info;
+      } else if (res.code === 1000) {
+        message.error("用户认证失效，请重新登录");
+        localStorage.clear();
+        navigate("/login");
+      } else {
+        message.error(res.message);
       }
-    })();
+    } catch (e) {
+      console.log(e);
+      message.error("服务器异常，请联系管理员");
+    }
+  };
+
+  useEffect(() => {
+    getCurrentUserInfoHandler().then((v) => {});
   }, []);
 
   // 级联筛选集群和名称空间
