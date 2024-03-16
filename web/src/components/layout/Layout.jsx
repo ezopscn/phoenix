@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
 import { Avatar, Cascader, Dropdown, Layout, Menu, message } from "antd";
-import { Logo, LogoWithTitle } from "../../common/Resource.jsx";
+import { FooterText, Logo, LogoWithTitle } from "../../common/Resource.jsx";
 import { LayoutMenuData } from "./LayoutData.jsx";
 import {
   CurrentUserInfoRequest,
@@ -224,7 +224,11 @@ const AdminLayout = () => {
             <Dropdown menu={{ items: LayoutDropdownMenuData }}>
               <div className="admin-header-dropdown">
                 <Avatar src={CurrentUserInfo?.avatar} size={28} />
-                <MoreOutlined />
+                <MoreOutlined
+                  style={{
+                    marginLeft: "5px",
+                  }}
+                />
               </div>
             </Dropdown>
           </div>
@@ -233,7 +237,7 @@ const AdminLayout = () => {
           <Outlet />
         </Content>
         <Footer className="admin-footer">
-          <b>🧬 PHOENIX </b>© 2024 EZOPS.CN, All Rights Reserved.
+          <FooterText />
         </Footer>
       </Layout>
     </Layout>

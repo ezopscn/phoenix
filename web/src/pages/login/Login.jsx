@@ -1,7 +1,7 @@
 import React from "react";
 import "../../assets/css/login.less";
 import { Button, Checkbox, Divider, Form, Input, message, Space } from "antd";
-import { LogoWithTitleNoBg } from "../../common/Resource.jsx";
+import { FooterText, LogoWithTitleNoBg } from "../../common/Resource.jsx";
 import {
   DingtalkOutlined,
   InsuranceOutlined,
@@ -160,7 +160,7 @@ const Login = () => {
             </div>
           </div>
           <div className="login-footer">
-            <b>🧬 PHOENIX </b>© 2024 EZOPS.CN, All Rights Reserved.
+            <FooterText />
           </div>
         </div>
       </div>

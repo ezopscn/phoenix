@@ -26,7 +26,7 @@ mysql:
   # 主机地址
   host: 127.0.0.1
   # 端口
-  port: 13306
+  port: 3306
   # 数据库
   database: phoenix
   # 用户名
@@ -55,7 +55,7 @@ redis:
   # 主机地址
   host: 127.0.0.1
   # 端口
-  port: 16379
+  port: 6379
   # 数据库
   database: 0
   # 密码，没有就不设置

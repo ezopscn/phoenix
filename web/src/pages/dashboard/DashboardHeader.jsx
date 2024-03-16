@@ -1,26 +1,28 @@
 import React from "react";
 import { Avatar, Statistic } from "antd";
-import DefaultAvatar from "../../assets/image/avatar/default.png";
 import { UserStates } from "../../store/Store.jsx";
 
 // 问候语
 function getHelloWord(name) {
-  let hour = new Date().getHours();
-  let hello;
+  let arr = ["日", "一", "二", "三", "四", "五", "六"];
+  let day = new Date();
+  let hour = day.getHours();
+  let week = day.getDay();
+  let hello = name + "，今天是星期" + arr[week];
   if (hour > 22) {
-    hello = "夜深了，" + name + "，别卷了，要好好休息哦 ~";
+    hello = hello + "，别卷了，要好好休息哦 ~";
   } else if (hour > 18) {
-    hello = "晚上好，" + name + "，适当加班，然后回家吧 ~";
+    hello = hello + "，适当加班，然后早点回家吧 ~";
   } else if (hour > 14) {
-    hello = "下午好，" + name + "，如果困了，来杯咖啡提神吧 ~";
+    hello = hello + "，如果困了，来杯咖啡提神吧 ~";
   } else if (hour > 11) {
-    hello = "中午好，" + name + "，好好吃饭，好好休息，中午不睡下午崩溃哦 ~";
+    hello = hello + "，好好吃饭，好好休息，中午不睡下午崩溃哦 ~";
   } else if (hour > 6) {
-    hello = "早上好，" + name + "，新的一天，也要元气满满哦 ~";
+    hello = hello + "，新的一天，也要元气满满哦 ~";
   } else if (hour > 3) {
-    hello = "OH MY GOD，" + name + "，也太早了吧，你是还没睡吗 ~";
+    hello = hello + "，也太早了吧，你是还没睡吗 ~";
   } else {
-    hello = "打扰了，" + name + "，这个时候不是应该睡觉吗 ~";
+    hello = hello + "，这个时候不是应该睡觉吗 ~";
   }
   return hello;
 }
@@ -35,17 +37,11 @@ const DashboardHeader = () => {
       "）",
   );
 
-  // 面包屑
-  const items = [
-    { label: "菜单项一", key: "item-1" },
-    { label: "菜单项二", key: "item-2" },
-  ];
-
   return (
     <>
       <div className="admin-left">
         <div className="admin-avatar">
-          <Avatar src={DefaultAvatar} size={60} />
+          <Avatar src={UserStates.CurrentUserInfo?.avatar} size={60} />
         </div>
         <div className="admin-info">
           <div className="admin-welcome">{hello}</div>

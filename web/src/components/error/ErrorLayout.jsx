@@ -1,6 +1,6 @@
 import React from "react";
 import "../../assets/css/error.less";
-import { LogoWithTitleNoBg } from "../../common/Resource.jsx";
+import { FooterText, LogoWithTitleNoBg } from "../../common/Resource.jsx";
 import { Outlet, useNavigate } from "react-router";
 import { Button } from "antd";
 
@@ -29,7 +29,7 @@ const ErrorLayout = () => {
           </div>
         </div>
         <div className="error-footer">
-          <b>🧬 PHOENIX </b>© 2024 EZOPS.CN, All Rights Reserved.
+          <FooterText />
         </div>
       </div>
     </>
