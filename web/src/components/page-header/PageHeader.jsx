@@ -1,7 +1,7 @@
 // 页面头部，接收以下参数
 // title: 名称
 // notices: 说明列表
-const ButterflyPageHeader = (props) => {
+const CommonPageHeader = (props) => {
   return (
     <div className="admin-common-page-header">
       <div className="admin-notice">
@@ -12,4 +12,4 @@ const ButterflyPageHeader = (props) => {
   );
 };
 
-export default ButterflyPageHeader;
+export default CommonPageHeader;

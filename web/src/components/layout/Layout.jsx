@@ -212,8 +212,12 @@ const AdminLayout = () => {
     {
       key: '2',
       label: (
-        <a rel="noopener noreferrer" onClick={() => {}}>
-          联系我们
+        <a
+          rel="noopener noreferrer"
+          onClick={() => {
+            navigate('/me');
+          }}>
+          个人中心
         </a>
       ),
     },

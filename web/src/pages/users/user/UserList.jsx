@@ -1,8 +1,8 @@
 import React from 'react';
-import ButterflyPageHeader from '../../../components/page-header/PageHeader.jsx';
 import UserListSearch from './UserListSearch.jsx';
 import UserListTable from './UserListTable.jsx';
 import UserListBtnGroup from './UserListBtnGroup.jsx';
+import CommonPageHeader from '../../../components/page-header/PageHeader.jsx';
 
 // 提示信息
 const UserNotices = () => {
@@ -23,7 +23,7 @@ const UserList = () => {
     <>
       {/*提示信息*/}
       <div className="admin-tips">
-        <ButterflyPageHeader title={title} notices={<UserNotices />} />
+        <CommonPageHeader title={title} notices={<UserNotices />} />
       </div>
 
       {/*搜索*/}

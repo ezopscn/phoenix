@@ -1,5 +1,5 @@
 import React from 'react';
-import ButterflyPageHeader from '../../../components/page-header/PageHeader.jsx';
+import CommonPageHeader from '../../../components/page-header/PageHeader.jsx';
 
 // 提示信息
 const NodeNotices = () => {
@@ -24,7 +24,7 @@ const Node = () => {
 
   return (
     <>
-      <ButterflyPageHeader title={title} notices={<NodeNotices />} />
+      <CommonPageHeader title={title} notices={<NodeNotices />} />
     </>
   );
 };
