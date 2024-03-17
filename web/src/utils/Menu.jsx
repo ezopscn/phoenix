@@ -1,5 +1,5 @@
-import * as Icon from "@ant-design/icons";
-import React from "react";
+import * as Icon from '@ant-design/icons';
+import React from 'react';
 
 // 生成菜单结构
 function GetMenuItem(label, key, icon, children, type) {

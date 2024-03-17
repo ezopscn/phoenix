@@ -1,5 +1,5 @@
-import React from "react";
-import ForbiddenErrorImage from "../../assets/image/error/403.svg";
+import React from 'react';
+import ForbiddenErrorImage from '../../assets/image/error/403.svg';
 
 const ForbiddenError = () => {
   return (

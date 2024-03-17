@@ -1,35 +1,30 @@
-import React from "react";
-import { Button, Col, Dropdown, Row, Space } from "antd";
-import {
-  DownloadOutlined,
-  DownOutlined,
-  UploadOutlined,
-  UserAddOutlined,
-} from "@ant-design/icons";
+import React from 'react';
+import { Button, Col, Dropdown, Row, Space } from 'antd';
+import { DownloadOutlined, DownOutlined, UploadOutlined, UserAddOutlined } from '@ant-design/icons';
 
 // 用户批量操作下拉菜单
 const userMultiHandleItems = [
   {
-    label: "锁定选中用户",
-    key: "1",
+    label: '锁定选中用户',
+    key: '1',
   },
   {
-    label: "解锁选中用户",
-    key: "2",
+    label: '解锁选中用户',
+    key: '2',
   },
   {
-    label: "激活选中用户",
-    key: "3",
+    label: '激活选中用户',
+    key: '3',
   },
   {
-    label: "删除选中用户",
-    key: "4",
+    label: '删除选中用户',
+    key: '4',
   },
 ];
 
 // 执行方法
 const userMultiHandle = (e) => {
-  console.log("数据：", e);
+  console.log('数据：', e);
 };
 
 // 对象

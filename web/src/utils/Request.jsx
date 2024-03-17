@@ -1,8 +1,6 @@
 // axios 请求封装
-import axios from "axios";
-import { GetToken } from "./Token.jsx";
-import { useNavigate } from "react-router";
-import { message } from "antd";
+import axios from 'axios';
+import { GetToken } from './Token.jsx';
 
 // 创建实例
 const instance = axios.create({
@@ -14,7 +12,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   function (config) {
     // 在请求头中添加 Token
-    config.headers.Authorization = "Bearer " + GetToken();
+    config.headers.Authorization = 'Bearer ' + GetToken();
     return config;
   },
   function (error) {
@@ -33,20 +31,16 @@ instance.interceptors.response.use(
 );
 
 // GET 请求
-export const GET = (url, params) =>
-  instance.get(url, params).then((res) => res.data);
+export const GET = (url, params) => instance.get(url, params).then((res) => res.data);
 
 // POST 请求
-export const POST = (url, data) =>
-  instance.post(url, data).then((res) => res.data);
+export const POST = (url, data) => instance.post(url, data).then((res) => res.data);
 
 // PUT 请求
-export const PUT = (url, data) =>
-  instance.put(url, data).then((res) => res.data);
+export const PUT = (url, data) => instance.put(url, data).then((res) => res.data);
 
 // PATCH 请求
-export const PATCH = (url, data) =>
-  instance.patch(url, data).then((res) => res.data);
+export const PATCH = (url, data) => instance.patch(url, data).then((res) => res.data);
 
 // DELETE 请求
 export const DELETE = (url) => instance.delete(url).then((res) => res.data);

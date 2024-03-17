@@ -1,5 +1,5 @@
-import React from "react";
-import ServerErrorImage from "../../assets/image/error/500.svg";
+import React from 'react';
+import ServerErrorImage from '../../assets/image/error/500.svg';
 
 const ServerError = () => {
   return (

@@ -1,8 +1,8 @@
-import React from "react";
-import "../../assets/css/error.less";
-import { FooterText, LogoWithTitleNoBg } from "../../common/Resource.jsx";
-import { Outlet, useNavigate } from "react-router";
-import { Button } from "antd";
+import React from 'react';
+import '../../assets/css/error.less';
+import { FooterText, LogoWithTitleNoBg } from '../../common/Resource.jsx';
+import { Outlet, useNavigate } from 'react-router';
+import { Button } from 'antd';
 
 const ErrorLayout = () => {
   const navigate = useNavigate();
@@ -18,11 +18,7 @@ const ErrorLayout = () => {
               <Outlet />
             </div>
             <div>
-              <Button
-                onClick={() => navigate("/")}
-                className="error-btn"
-                type="primary"
-              >
+              <Button onClick={() => navigate('/')} className="error-btn" type="primary">
                 返回首页
               </Button>
             </div>

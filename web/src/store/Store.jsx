@@ -1,4 +1,4 @@
-import { proxy } from "valtio"; // 地区数据
+import { proxy } from 'valtio'; // 地区数据
 
 // 地区
 export const RegionStates = proxy({

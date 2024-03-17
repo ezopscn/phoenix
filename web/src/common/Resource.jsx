@@ -1,7 +1,7 @@
-import Logo from "../assets/image/logo/phoenix-logo.png";
-import LogoWithTitle from "../assets/image/logo/phoenix-with-title.png";
-import LogoWithTitleNoBg from "../assets/image/logo/phoenix-with-title-nobg.png";
-import React from "react";
+import Logo from '../assets/image/logo/phoenix-logo.png';
+import LogoWithTitle from '../assets/image/logo/phoenix-with-title.png';
+import LogoWithTitleNoBg from '../assets/image/logo/phoenix-with-title-nobg.png';
+import React from 'react';
 
 // 底部内容
 const FooterText = () => {

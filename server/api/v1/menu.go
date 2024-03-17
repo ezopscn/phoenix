@@ -114,6 +114,38 @@ func GetCurrentUserMenuTreeHandler(ctx *gin.Context) {
 	})
 }
 
+// 获取当前用户菜单列表
+func GetCurrentUserMenuListHandler(ctx *gin.Context) {
+	var menus []model.Menu
+	var role model.Role
+
+	// 获取当前用户的角色信息
+	roleKeyword, err := utils.GetRoleKeywordFromContext(ctx)
+	if err != nil {
+		response.FailedWithMessage("获取当前用户的角色信息失败")
+		return
+	}
+
+	// 获取指定角色的菜单列表
+	if roleKeyword == common.SuperAdminRoleKeyword {
+		// 管理员则获取所有的菜单
+		err = common.DB.Find(&menus).Error
+	} else {
+		// 查询指定角色的菜单
+		err = common.DB.Preload("Menus").Where("keyword = ?", roleKeyword).First(&role).Error
+		menus = role.Menus
+	}
+
+	if err != nil {
+		response.FailedWithMessage("获取当前用户的菜单列表失败")
+		return
+	}
+
+	response.SuccessWithData(gin.H{
+		"list": menus,
+	})
+}
+
 // 获取指定角色的菜单列表处理函数
 func GetSpecifyRoleMenuListHandler(ctx *gin.Context) {
 	// 获取 URI 参数，并验证合法性

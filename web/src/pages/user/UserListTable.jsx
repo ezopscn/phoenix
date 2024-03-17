@@ -1,64 +1,57 @@
-import React, { useState } from "react";
-import { Avatar, Badge, Descriptions, Space, Table, Tag } from "antd";
-import { UserStates } from "../../store/Store.jsx";
-import { useSnapshot } from "valtio";
+import React, { useState } from 'react';
+import { Avatar, Badge, Descriptions, Space, Table, Tag } from 'antd';
+import { UserStates } from '../../store/Store.jsx';
+import { useSnapshot } from 'valtio';
 
 // 用户表格定义
 const userListColumns = [
   Table.EXPAND_COLUMN, // 展开
   Table.SELECTION_COLUMN, // 选择
   {
-    title: "用户",
-    dataIndex: "avatar",
-    width: "60px",
-    align: "center",
+    title: '用户',
+    dataIndex: 'avatar',
+    width: '60px',
+    align: 'center',
     render: (text) => <Avatar src={text} size={18} />,
   },
   {
-    title: "英文名",
-    dataIndex: "en_name",
+    title: '英文名',
+    dataIndex: 'en_name',
   },
   {
-    title: "中文名",
-    dataIndex: "cn_name",
+    title: '中文名',
+    dataIndex: 'cn_name',
   },
   {
-    title: "性别",
-    dataIndex: "gender",
-    width: "60px",
-    render: (gender) =>
-      gender === 1 ? (
-        <Tag color="blue">男</Tag>
-      ) : gender === 2 ? (
-        <Tag color="magenta">女</Tag>
-      ) : (
-        <Tag color="green">未知</Tag>
-      ),
+    title: '性别',
+    dataIndex: 'gender',
+    width: '60px',
+    render: (gender) => (gender === 1 ? <Tag color="blue">男</Tag> : gender === 2 ? <Tag color="magenta">女</Tag> : <Tag color="green">未知</Tag>),
   },
   {
-    title: "手机号",
-    dataIndex: "mobile",
+    title: '手机号',
+    dataIndex: 'mobile',
   },
   {
-    title: "邮箱",
-    dataIndex: "email",
+    title: '邮箱',
+    dataIndex: 'email',
   },
   {
-    title: "工号",
-    dataIndex: "job_number",
+    title: '工号',
+    dataIndex: 'job_number',
   },
   {
-    title: "部门",
-    dataIndex: ["system_department", "name"],
+    title: '部门',
+    dataIndex: ['system_department', 'name'],
   },
   {
-    title: "职位",
-    dataIndex: "job_name",
+    title: '职位',
+    dataIndex: 'job_name',
   },
   {
-    title: "角色",
+    title: '角色',
     render: (record) =>
-      record.system_role?.keyword === "Administrator" ? (
+      record.system_role?.keyword === 'Administrator' ? (
         <Tag color="red">
           {record.system_role?.name} / {record.system_role?.keyword}
         </Tag>
@@ -69,22 +62,20 @@ const userListColumns = [
       ),
   },
   {
-    title: "激活",
-    dataIndex: "active",
-    align: "center",
-    render: (active) =>
-      active === 1 ? <Badge status="success" /> : <Badge status="error" />,
+    title: '激活',
+    dataIndex: 'active',
+    align: 'center',
+    render: (active) => (active === 1 ? <Badge status="success" /> : <Badge status="error" />),
   },
   {
-    title: "锁定",
-    dataIndex: "unlocked",
-    align: "center",
-    render: (unlocked) =>
-      unlocked === 1 ? <Badge status="success" /> : <Badge status="error" />,
+    title: '锁定',
+    dataIndex: 'unlocked',
+    align: 'center',
+    render: (unlocked) => (unlocked === 1 ? <Badge status="success" /> : <Badge status="error" />),
   },
   {
-    title: "操作",
-    align: "center",
+    title: '操作',
+    align: 'center',
     render: (_, record) => (
       <Space size="middle">
         <a
@@ -92,8 +83,7 @@ const userListColumns = [
             console.log(record.username);
             UserStates.UserEditModelOpen = true;
             UserStates.EditUserInfo = record;
-          }}
-        >
+          }}>
           修改
         </a>
         <a>禁用</a>
@@ -107,14 +97,10 @@ const userListColumns = [
 // 选中用户
 const userListRowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
-    console.log(
-      `selectedRowKeys: ${selectedRowKeys}`,
-      "selectedRows: ",
-      selectedRows,
-    );
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   },
   getUserListCheckboxProps: (record) => ({
-    disabled: record.username === "admin",
+    disabled: record.username === 'admin',
     username: record.username,
   }),
 };
@@ -165,42 +151,25 @@ const UserListTable = () => {
       ) : (
         <Table
           rowSelection={{
-            type: "checkbox",
+            type: 'checkbox',
             ...userListRowSelection,
           }}
           expandable={{
             expandedRowRender: (record) => (
               <div className="admin-list-expand-content">
                 <Descriptions column={1} size="small">
-                  <Descriptions.Item label="用户账户">
-                    {record.username}
-                  </Descriptions.Item>
+                  <Descriptions.Item label="用户账户">{record.username}</Descriptions.Item>
                   <Descriptions.Item label="用户籍贯">
                     {record.native_province.name} - {record.native_city.name}
                   </Descriptions.Item>
                   <Descriptions.Item label="办公地点">
-                    {record.office_province.name} - {record.office_city.name} -{" "}
-                    {record.office_address}
+                    {record.office_province.name} - {record.office_city.name} - {record.office_address}
                   </Descriptions.Item>
-                  <Descriptions.Item label="管理人员">
-                    {record.leader === 1 ? (
-                      <span style={{ color: "#cf1322" }}>是</span>
-                    ) : (
-                      "否"
-                    )}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="入职时间">
-                    {record.entry_time}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="用户生日">
-                    {record.birthday}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="创建时间">
-                    {record.created_at}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="最后登录">
-                    {record.last_login}
-                  </Descriptions.Item>
+                  <Descriptions.Item label="管理人员">{record.leader === 1 ? <span style={{ color: '#cf1322' }}>是</span> : '否'}</Descriptions.Item>
+                  <Descriptions.Item label="入职时间">{record.entry_time}</Descriptions.Item>
+                  <Descriptions.Item label="用户生日">{record.birthday}</Descriptions.Item>
+                  <Descriptions.Item label="创建时间">{record.created_at}</Descriptions.Item>
+                  <Descriptions.Item label="最后登录">{record.last_login}</Descriptions.Item>
                 </Descriptions>
               </div>
             ),
@@ -214,7 +183,7 @@ const UserListTable = () => {
           size="small"
           pagination={{
             total: totalCount,
-            showTotal: () => "总共 " + totalCount + " 条数据",
+            showTotal: () => '总共 ' + totalCount + ' 条数据',
             defaultCurrent: requestPageParams.page_number,
             defaultPageSize: requestPageParams.page_size,
             showSizeChanger: true,
