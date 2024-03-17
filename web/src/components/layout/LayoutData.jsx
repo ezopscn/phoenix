@@ -15,7 +15,7 @@ import {
 } from "@ant-design/icons"; // 菜单数据
 
 // 生成菜单结构
-function getItem(label, key, icon, children, type) {
+function getMenuItem(label, key, icon, children, type) {
   return {
     key,
     icon,

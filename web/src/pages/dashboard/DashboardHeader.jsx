@@ -123,7 +123,7 @@ const DashboardHeader = () => {
             marginRight: 30,
           }}
         />
-        <Statistic title="任务数量" value={16384} />
+        <Statistic title="集群数量" value={7} />
       </div>
     </>
   );

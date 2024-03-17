@@ -1,5 +1,5 @@
 import { GET, POST } from "./Request.jsx";
-import { APIConfig } from "../common/Config.jsx";
+import { APIConfig } from "../common/Config.jsx"; // 接口请求
 
 // 接口请求
 export const LoginRequest = (data) => POST(APIConfig.LoginAPI, data); // 用户登录

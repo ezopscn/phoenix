@@ -21,3 +21,8 @@ export const UserStates = proxy({
   UserSearchFieldExpand: false, //是否展开所有搜索字段
   UserListSearchParams: {}, // 用户搜索参数
 });
+
+// 菜单
+export const MenuStates = proxy({
+  CurrentUserMenuTree: [], // 当前用户菜单树
+});

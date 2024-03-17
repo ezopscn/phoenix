@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
 import { Avatar, Cascader, Dropdown, Layout, Menu, message } from "antd";
 import { FooterText, Logo, LogoWithTitle } from "../../common/Resource.jsx";
-import { LayoutMenuData } from "./LayoutData.jsx";
 import {
   CurrentUserInfoRequest,
   LogoutRequest,
@@ -10,6 +9,9 @@ import {
 import { UserStates } from "../../store/Store.jsx";
 import { useSnapshot } from "valtio";
 import { MoreOutlined } from "@ant-design/icons";
+import { GET } from "../../utils/Request.jsx";
+import { APIConfig } from "../../common/Config.jsx";
+import { GenerateMenuTree } from "../../utils/Menu.jsx";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -21,17 +23,34 @@ const AdminLayout = () => {
   // 菜单跳转
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
+  const [menuTree, setMenuTree] = useState([]);
 
   // 用户数据
   const { CurrentUserInfo } = useSnapshot(UserStates);
 
-  // 获取用户信息
   useEffect(() => {
+    // 获取用户信息
     (async () => {
       try {
         const res = await CurrentUserInfoRequest();
         if (res.code === 200) {
           UserStates.CurrentUserInfo = res.data.info;
+
+          // 查询菜单
+          const res2 = await GET(
+            APIConfig.BaseURL +
+              "/role/" +
+              UserStates.CurrentUserInfo?.role.keyword +
+              "/menu/list",
+          );
+          if (res2.code === 200) {
+            // 处理菜单树
+            const tree = GenerateMenuTree(0, res2.data.list);
+            setMenuTree(tree);
+            console.log(tree);
+          } else {
+            message.error(res2.message);
+          }
         } else if (res.code === 1000) {
           message.error("用户认证失效，请重新登录");
           localStorage.clear();
@@ -188,7 +207,7 @@ const AdminLayout = () => {
           theme="dark"
           mode="inline"
           defaultSelectedKeys={["1"]}
-          items={LayoutMenuData}
+          items={menuTree}
           onClick={({ key }) => {
             console.log(key);
             navigate(key); // 路由跳转
