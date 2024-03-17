@@ -26,3 +26,10 @@ export const UserStates = proxy({
 export const MenuStates = proxy({
   CurrentUserMenuTree: [], // 当前用户菜单树
 });
+
+// Layout
+export const LayoutStates = proxy({
+  MenuSiderCollapsed: false, // 是否收起侧边菜单栏
+  MenuOpenKeys: [], // 默认展开的菜单
+  MenuSelectKeys: [], // 默认选中的菜单
+});

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router";
+import { Outlet, useLocation, useNavigate } from "react-router";
 import { Avatar, Cascader, Dropdown, Layout, Menu, message } from "antd";
 import { FooterText, Logo, LogoWithTitle } from "../../common/Resource.jsx";
 import {
   CurrentUserInfoRequest,
   LogoutRequest,
 } from "../../utils/RequestAPI.jsx";
-import { UserStates } from "../../store/Store.jsx";
+import { LayoutStates, UserStates } from "../../store/Store.jsx";
 import { useSnapshot } from "valtio";
 import { MoreOutlined } from "@ant-design/icons";
 import { GET } from "../../utils/Request.jsx";
@@ -20,10 +20,15 @@ const AdminLayout = () => {
   const menuWidth = 240;
   const menuCollapsedWidth = 60;
 
+  // 用于获取请求连接
+  const { pathname } = useLocation();
+
   // 菜单跳转
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const [menuTree, setMenuTree] = useState([]);
+  const { MenuSiderCollapsed, MenuOpenKeys, MenuSelectKeys } =
+    useSnapshot(LayoutStates);
 
   // 用户数据
   const { CurrentUserInfo } = useSnapshot(UserStates);
@@ -64,6 +69,43 @@ const AdminLayout = () => {
       }
     })();
   }, []);
+
+  const findKeyList = (key, menus) => {
+    // 当前请求的菜单列表，可能是一级菜单，也可能是二级甚至多级
+    const result = [];
+    // 传入菜单列表，判断当前请求的菜单是否在菜单列表中
+    const findInfo = (menuList) => {
+      menuList.forEach((item) => {
+        // 生成一级菜单列表
+        if (key.includes(item.key)) {
+          result.push(item.key);
+          if (item.children) {
+            // 递归继续查找
+            findInfo(item.children);
+          }
+        }
+      });
+    };
+
+    // 调用函数
+    findInfo(menus);
+    return result;
+  };
+
+  useEffect(() => {
+    if (menuTree.length > 0) {
+      // 修改默认打开和选中菜单
+      let keys = findKeyList(pathname, menuTree);
+      LayoutStates.MenuSelectKeys = keys;
+
+      // 解决收起菜单会弹出子菜单的问题
+      if (MenuSiderCollapsed) {
+        LayoutStates.MenuOpenKeys = [];
+      } else {
+        LayoutStates.MenuOpenKeys = keys;
+      }
+    }
+  }, [pathname, menuTree]);
 
   // 级联筛选集群和名称空间
   const clustersAndNamespacesData = [
@@ -169,7 +211,7 @@ const AdminLayout = () => {
     {
       key: "2",
       label: (
-        <a rel="noopener noreferrer" href="">
+        <a rel="noopener noreferrer" onClick={() => {}}>
           联系我们
         </a>
       ),
@@ -205,12 +247,21 @@ const AdminLayout = () => {
         <Menu
           className="admin-sider-menu"
           theme="dark"
+          defaultSelectedKeys="['/dashboard']"
+          openKeys={MenuOpenKeys}
+          selectedKeys={MenuSelectKeys}
           mode="inline"
-          defaultSelectedKeys={["1"]}
           items={menuTree}
+          onOpenChange={(key) => {
+            // 解决 404 等页码第一次点击折叠菜单不展开和收起菜单栏不选中问题
+            // LayoutStates.MenuOpenKeys = [key[key.length - 1]];
+            LayoutStates.MenuOpenKeys = key;
+          }}
+          // 菜单点击事件，能够返回对应的 Key
+          // 文档中提示可获取到 item, key, keyPath, domEvent
           onClick={({ key }) => {
-            console.log(key);
-            navigate(key); // 路由跳转
+            // 跳转到 key 定义的 url
+            navigate(key);
           }}
         />
       </Sider>
