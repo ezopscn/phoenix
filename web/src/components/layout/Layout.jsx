@@ -21,6 +21,7 @@ const AdminLayout = () => {
   // 菜单跳转
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
+  const [menuList, setMenuList] = useState([]);
   const [menuTree, setMenuTree] = useState([]);
   const { MenuSiderCollapsed, MenuOpenKeys, MenuSelectKeys } = useSnapshot(LayoutStates);
 
@@ -55,9 +56,9 @@ const AdminLayout = () => {
         const res = await CurrentUserMenuListRequest();
         if (res.code === 200) {
           // 处理菜单树
+          setMenuList(res.data.list);
           const tree = GenerateMenuTree(0, res.data.list);
           setMenuTree(tree);
-          console.log(tree);
         } else {
           message.error(res.message);
         }
@@ -68,32 +69,38 @@ const AdminLayout = () => {
     })();
   }, []);
 
-  const findKeyList = (key, menus) => {
-    // 当前请求的菜单列表，可能是一级菜单，也可能是二级甚至多级
+  const findKeyList = (path, menus) => {
     const result = [];
-    // 传入菜单列表，判断当前请求的菜单是否在菜单列表中
-    const findInfo = (menuList) => {
-      menuList.forEach((item) => {
-        // 生成一级菜单列表
-        if (key.includes(item.key)) {
-          result.push(item.key);
-          if (item.children) {
-            // 递归继续查找
-            findInfo(item.children);
+    let fmenu = {};
+
+    // 先找到对应的菜单
+    menus.forEach((menu) => {
+      if (menu.path === path) {
+        fmenu = menu;
+        result.push(path);
+      }
+    });
+
+    // 通过找到的菜单，查询它的所有上级菜单
+    const findMenu = (menu) => {
+      if (menu.parent_id !== 0) {
+        menus.forEach((item) => {
+          if (item.id === menu.parent_id) {
+            result.push(item.path);
+            findMenu(item);
           }
-        }
-      });
+        });
+      }
     };
 
-    // 调用函数
-    findInfo(menus);
+    findMenu(fmenu);
     return result;
   };
 
   useEffect(() => {
-    if (menuTree.length > 0) {
+    if (menuList.length > 0) {
       // 修改默认打开和选中菜单
-      let keys = findKeyList(pathname, menuTree);
+      let keys = findKeyList(pathname, menuList);
       LayoutStates.MenuSelectKeys = keys;
 
       // 解决收起菜单会弹出子菜单的问题
@@ -103,7 +110,7 @@ const AdminLayout = () => {
         LayoutStates.MenuOpenKeys = keys;
       }
     }
-  }, [pathname, menuTree]);
+  }, [pathname, menuList]);
 
   // 级联筛选集群和名称空间
   const clustersAndNamespacesData = [
