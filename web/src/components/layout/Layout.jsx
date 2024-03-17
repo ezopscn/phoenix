@@ -57,6 +57,7 @@ const AdminLayout = () => {
           // 处理菜单树
           const tree = GenerateMenuTree(0, res.data.list);
           setMenuTree(tree);
+          console.log(tree);
         } else {
           message.error(res.message);
         }

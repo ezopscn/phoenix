@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Avatar, Badge, Descriptions, Space, Table, Tag } from 'antd';
-import { UserStates } from '../../store/Store.jsx';
+import { UserStates } from '../../../store/Store.jsx';
 import { useSnapshot } from 'valtio';
 
 // 用户表格定义

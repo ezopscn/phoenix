@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSnapshot } from 'valtio';
-import { DepartmentStates, RegionStates, RoleStates, UserStates } from '../../store/Store.jsx';
+import { DepartmentStates, RegionStates, RoleStates, UserStates } from '../../../store/Store.jsx';
 import { Button, Col, Form, Input, Row, Select } from 'antd';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 
