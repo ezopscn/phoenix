@@ -23,16 +23,22 @@
 
     .error-info {
       img {
+        position: relative;
         width: 300px;
-        margin-bottom: 50px;
+        margin-bottom: 100px;
+        user-select: none;
       }
 
       .error-code {
-        position: relative;
-        top: 180px;
-        right: -150px;
-        font-size: 70px;
+        position: fixed;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -55%);
+        font-size: 600px;
         font-weight: bold;
+        margin-bottom: 20px;
+        opacity: 0.05;
+        user-select: none;
       }
     }
 

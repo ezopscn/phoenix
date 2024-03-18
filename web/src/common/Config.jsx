@@ -11,6 +11,7 @@ const APIConfig = {
   CurrentUserDepartmentInfoAPI: backendUrl + '/department/info', // 当前用户部门信息接口
   CurrentUserMenuTreeAPI: backendUrl + '/menu/tree', // 当前用户的菜单树
   CurrentUserMenuListAPI: backendUrl + '/user/menu/list', // 当前用户的菜单列表
+  UserListAPI: backendUrl + '/user/list', // 用户列表
 };
 
 export { APIConfig };

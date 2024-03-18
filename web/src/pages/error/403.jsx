@@ -5,7 +5,7 @@ const ForbiddenError = () => {
   return (
     <>
       <div className="error-code">403</div>
-      <img src={ForbiddenErrorImage} alt="" />
+      <img src={ForbiddenErrorImage} alt="" draggable="false" />
     </>
   );
 };

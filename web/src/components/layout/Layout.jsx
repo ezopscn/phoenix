@@ -7,6 +7,7 @@ import { LayoutStates, UserStates } from '../../store/Store.jsx';
 import { useSnapshot } from 'valtio';
 import { MoreOutlined } from '@ant-design/icons';
 import { GenerateMenuTree } from '../../utils/Menu.jsx';
+import MenuPermissionCheck from '../../utils/Permission.jsx';
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -99,6 +100,13 @@ const AdminLayout = () => {
 
   useEffect(() => {
     if (menuList.length > 0) {
+      // 菜单鉴权
+      if (!MenuPermissionCheck(pathname, menuList)) {
+        message.error('权限不足');
+        navigate('/error/403');
+        return;
+      }
+
       // 修改默认打开和选中菜单
       let keys = findKeyList(pathname, menuList);
       LayoutStates.MenuSelectKeys = keys;

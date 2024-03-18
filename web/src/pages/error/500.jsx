@@ -5,7 +5,7 @@ const ServerError = () => {
   return (
     <>
       <div className="error-code">500</div>
-      <img src={ServerErrorImage} alt="" />
+      <img src={ServerErrorImage} alt="" draggable="false" />
     </>
   );
 };

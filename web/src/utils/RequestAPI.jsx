@@ -8,3 +8,4 @@ export const UserCountRequest = () => GET(APIConfig.UserCountAPI); // 用户总�
 export const CurrentUserInfoRequest = () => GET(APIConfig.CurrentUserInfoAPI); // 当前用户信息
 export const CurrentUserDepartmentInfoRequest = () => GET(APIConfig.CurrentUserDepartmentInfoAPI); // 当前用户信息
 export const CurrentUserMenuListRequest = () => GET(APIConfig.CurrentUserMenuListAPI); // 当前用户菜单列表
+export const UserListRequest = (params) => GET(APIConfig.UserListAPI, params); // 用户列表

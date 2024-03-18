@@ -5,7 +5,7 @@ const NotFoundError = () => {
   return (
     <>
       <div className="error-code">404</div>
-      <img src={NotFoundErrorImage} alt="" />
+      <img src={NotFoundErrorImage} alt="" draggable="false" />
     </>
   );
 };

@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { Avatar, Badge, Descriptions, Space, Table, Tag } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Avatar, Badge, Descriptions, message, Space, Table, Tag } from 'antd';
 import { UserStates } from '../../../store/Store.jsx';
 import { useSnapshot } from 'valtio';
+import { UserListRequest } from '../../../utils/RequestAPI.jsx';
+import moment from 'moment';
 
 // 用户表格定义
 const userListColumns = [
@@ -26,11 +28,11 @@ const userListColumns = [
     title: '性别',
     dataIndex: 'gender',
     width: '60px',
-    render: (gender) => (gender === 1 ? <Tag color="blue">男</Tag> : gender === 2 ? <Tag color="magenta">女</Tag> : <Tag color="green">未知</Tag>),
+    render: (gender) => (gender === 1 ? <Tag color="blue">男</Tag> : gender === 2 ? <Tag color="magenta">女</Tag> : <Tag color="yellow">未知</Tag>),
   },
   {
     title: '手机号',
-    dataIndex: 'mobile',
+    dataIndex: 'phone',
   },
   {
     title: '邮箱',
@@ -38,11 +40,11 @@ const userListColumns = [
   },
   {
     title: '工号',
-    dataIndex: 'job_number',
+    dataIndex: 'job_id',
   },
   {
     title: '部门',
-    dataIndex: ['system_department', 'name'],
+    dataIndex: ['department', 'name'],
   },
   {
     title: '职位',
@@ -51,27 +53,21 @@ const userListColumns = [
   {
     title: '角色',
     render: (record) =>
-      record.system_role?.keyword === 'Administrator' ? (
+      record.role?.keyword === 'administrator' ? (
         <Tag color="red">
-          {record.system_role?.name} / {record.system_role?.keyword}
+          {record.role?.name} / {record.role?.keyword}
         </Tag>
       ) : (
         <Tag className="admin-gray-tag">
-          {record.system_role?.name} / {record.system_role?.keyword}
+          {record.role?.name} / {record.role?.keyword}
         </Tag>
       ),
   },
   {
-    title: '激活',
-    dataIndex: 'active',
+    title: '状态',
+    dataIndex: 'status',
     align: 'center',
-    render: (active) => (active === 1 ? <Badge status="success" /> : <Badge status="error" />),
-  },
-  {
-    title: '锁定',
-    dataIndex: 'unlocked',
-    align: 'center',
-    render: (unlocked) => (unlocked === 1 ? <Badge status="success" /> : <Badge status="error" />),
+    render: (status) => (status === 1 ? <Badge status="success" /> : <Badge status="error" />),
   },
   {
     title: '操作',
@@ -80,9 +76,9 @@ const userListColumns = [
       <Space size="middle">
         <a
           onClick={() => {
-            console.log(record.username);
-            UserStates.UserEditModelOpen = true;
-            UserStates.EditUserInfo = record;
+            console.log(record.job_id);
+            // UserStates.UserEditModelOpen = true;
+            // UserStates.EditUserInfo = record;
           }}>
           修改
         </a>
@@ -99,10 +95,10 @@ const userListRowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   },
-  getUserListCheckboxProps: (record) => ({
-    disabled: record.username === 'admin',
-    username: record.username,
-  }),
+  // getUserListCheckboxProps: (record) => ({
+  //   disabled: record.username === 'admin',
+  //   username: record.username,
+  // }),
 };
 
 // 用户列表
@@ -115,33 +111,39 @@ const UserListTable = () => {
   const { UserListSearchParams } = useSnapshot(UserStates);
 
   // 数据总量
-  const [totalCount, setTotalCount] = useState(0);
+  const [pageTotal, setPageTotal] = useState(0);
 
   // 请求数据
   const [requestPageParams, setRequestPageParams] = useState({
     // 分页数据
     no_pagination: false, // 是否不分页
     page_number: 1, // 默认页码
-    page_size: 10, // 每页显示数量
+    page_size: 1, // 每页显示数量
   });
 
   // 组合对象
   const userListParams = { ...requestPageParams, ...UserListSearchParams };
 
   // 请求用户列表
-  // useEffect(() => {
-  //   // 获取用户列表，使用异步会导致短暂的 Warning 提示
-  //   const GetUserListHandle = async () => {
-  //     const res = await GetUserListAPI({ params: userListParams });
-  //     if (res.code === 200) {
-  //       setUserList(res.data.list);
-  //       setIsLoading(false);
-  //       // 设置分页信息
-  //       setTotalCount(res.data.page_info.total_count);
-  //     }
-  //   };
-  //   GetUserListHandle();
-  // }, [UserSearchParams, requestPageParams]); // 次数不能跟踪 userListParams，会死循环
+  useEffect(() => {
+    // 获取用户列表，使用异步会导致短暂的 Warning 提示
+    (async () => {
+      try {
+        const res = await UserListRequest({ params: userListParams });
+        if (res.code === 200) {
+          setUserList(res.data.list);
+          setIsLoading(false);
+          // 设置分页信息
+          setPageTotal(res.data.page.total);
+        } else {
+          message.error(res.message);
+        }
+      } catch (e) {
+        console.log(e);
+        message.error('服务器异常，请联系管理员');
+      }
+    })();
+  }, [requestPageParams]); // 次数不能跟踪 userListParams，会死循环
 
   return (
     <>
@@ -158,23 +160,21 @@ const UserListTable = () => {
             expandedRowRender: (record) => (
               <div className="admin-list-expand-content">
                 <Descriptions column={1} size="small">
-                  <Descriptions.Item label="用户账户">{record.username}</Descriptions.Item>
+                  <Descriptions.Item label="用户账户">{record.job_id}</Descriptions.Item>
                   <Descriptions.Item label="用户籍贯">
                     {record.native_province.name} - {record.native_city.name}
                   </Descriptions.Item>
                   <Descriptions.Item label="办公地点">
-                    {record.office_province.name} - {record.office_city.name} - {record.office_address}
+                    {record.office_province.name} - {record.office_city.name} - {record.office_area.name} - {record.office_street.name} - {record.office_address} - {record.office_station}
                   </Descriptions.Item>
                   <Descriptions.Item label="管理人员">{record.leader === 1 ? <span style={{ color: '#cf1322' }}>是</span> : '否'}</Descriptions.Item>
-                  <Descriptions.Item label="入职时间">{record.entry_time}</Descriptions.Item>
-                  <Descriptions.Item label="用户生日">{record.birthday}</Descriptions.Item>
+                  <Descriptions.Item label="入职时间">{moment(record.join_time).format('YYYY-MM-DD')}</Descriptions.Item>
+                  <Descriptions.Item label="用户生日">{moment(record.birthday).format('YYYY-MM-DD')}</Descriptions.Item>
                   <Descriptions.Item label="创建时间">{record.created_at}</Descriptions.Item>
-                  <Descriptions.Item label="最后登录">{record.last_login}</Descriptions.Item>
+                  <Descriptions.Item label="最后登录">{record.last_login_time}</Descriptions.Item>
                 </Descriptions>
               </div>
             ),
-            // 设置展开条件
-            // rowExpandable: (record) => record.system_role.keyword !== 'Administrator',
           }}
           columns={userListColumns} // 列
           dataSource={userList} // 用户数据
@@ -182,8 +182,8 @@ const UserListTable = () => {
           rowKey="id"
           size="small"
           pagination={{
-            total: totalCount,
-            showTotal: () => '总共 ' + totalCount + ' 条数据',
+            total: pageTotal,
+            showTotal: () => '总共 ' + pageTotal + ' 条数据',
             defaultCurrent: requestPageParams.page_number,
             defaultPageSize: requestPageParams.page_size,
             showSizeChanger: true,
@@ -193,6 +193,7 @@ const UserListTable = () => {
                 page_number: page,
                 page_size: pageSize,
               });
+
               // 重置为空，用于解决切换页面显示数量由大变小偶尔出现报错的问题。
               // 原因在于：由于异步请求还未完成，导致列表溢出的问题，虽然该问题会在请求完成后自己解决，但是控制台会提示：
               // Warning: [antd: Table] `dataSource` length is less than `pagination.total` but large than `pagination.pageSize`.
